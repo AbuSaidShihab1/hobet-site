@@ -8,7 +8,7 @@ import Popular from './pages/games/Popular'
 import Casino from './pages/games/Casino'
 import Others from './pages/games/Others'
 import Profile from './pages/user/Profile'
-import Games from './pages/Games'
+import Gamespage from './pages/Gamespage'
 const App = () => {
   return (
     <BrowserRouter>
@@ -16,7 +16,7 @@ const App = () => {
         <Route exact path="/" element={<Home/>}/>  
         <Route exact path="/login" element={<Login/>}/>  
         <Route exact path="/register" element={<Registration/>}/>  
-        <Route exact path="/games/:name" element={<Games/>}/>  
+        <Route exact path="/games/:name" element={<Gamespage/>}/>  
 
         {/* ----------user-pgaes------------------- */}
 

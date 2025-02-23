@@ -16,8 +16,8 @@ import Populargames from '../components/home/Populargames';
 import Originalgame from '../components/home/Originalgame';
 import GamePopup from '../components/modal/GamePopup';
 import SpinGamePopup from '../components/modal/SpinGamePopup';
-import { Header } from 'rsuite';
-const Games = () => {
+import Header from '../components/Header';
+const Gamespage = () => {
     const swiperRef = useRef(null);
     const [wifiSpeed, setWifiSpeed] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -101,4 +101,4 @@ const Games = () => {
   )
 }
 
-export default Games
+export default Gamespage
