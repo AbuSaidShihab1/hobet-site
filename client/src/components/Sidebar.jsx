@@ -65,8 +65,8 @@ const Sidebar = () => {
   const [paymnet_id,set_paymentid]=useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const { width, height } = useWindowSize(); // Get window size for confetti
-  const base_url=import.meta.env.VITE_BASE_URL;
-  const base_url2=import.meta.env.VITE_BASE_URL2;
+  const base_url="https://hobet-site.onrender.com";
+  const base_url2="https://api.eassypay.com";
   const merchant_name="hobet"
 
   useEffect(() => {
@@ -96,19 +96,24 @@ const Sidebar = () => {
   const presetAmounts = [300, 400, 600, 1000, 2000];
 
   const [user_details,set_userdetails]=useState([])
-  const user_data=()=>{
-    axios.get(`${base_url}/auth/user/${user_info?._id}`)
-    .then((res)=>{
-      console.log(res)
-      if(res.data.success){
-        set_userdetails(res.data.user)
-      }
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }   
+
+
   useEffect(()=>{
+    if(user_info){
+      const user_data=()=>{
+        axios.get(`${base_url}/auth/user/${user_info?._id}`)
+        .then((res)=>{
+          console.log(res)
+          if(res.data.success){
+            set_userdetails(res.data.user)
+          }
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }   
     user_data();
+
+    }
   },[])
   // Handle preset amount selection
   const handlePresetAmount = (value) => {
@@ -209,12 +214,8 @@ const Sidebar = () => {
     //   return;
     // }
 
-    if (!transactionAmount || isNaN(transactionAmount) || Number(transactionAmount) <= 0) {
-      Swal.fire({
-        icon: "error",
-        title: "Validation Error",
-        text: "Please enter a valid amount!",
-      });
+    if (!transactionAmount || isNaN(transactionAmount) || Number(transactionAmount) < 300 || Number(transactionAmount) > 10000) {
+      toast.error("Please enter a valid amount between 300 and 10000!");
       return;
     }
 
@@ -222,7 +223,6 @@ const Sidebar = () => {
     try {
       const {data} = await axios.post(`${base_url2}/api/payment/bkash`,{mid:"merchant1",payerId:user_details.player_id,amount:transactionAmount,currency:"BDT",redirectUrl:"https://www.babu88.com",orderId:orderId,callbackUrl:"https://admin.eassypay.com/bkash_api"});
       window.location.href = data.link;
-      console.log(data)
       if (data.status === 200) {
         Swal.fire({
           icon: "success",
@@ -234,7 +234,7 @@ const Sidebar = () => {
         Swal.fire({
           icon: "error",
           title: "Deposit Failed",
-          text: data.data.message || "An error occurred while processing your deposit.",
+          text:"An error occurred while processing your deposit.",
         });
         console.error("Deposit Error:", data.data);
       }
@@ -245,6 +245,8 @@ const Sidebar = () => {
     //     text: error.response?.data?.message || "Failed to connect to the server. Please try again later.",
     //   });
       console.log(error);
+      toast.error(error.name);
+
     }
   };
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
@@ -345,6 +347,12 @@ const Sidebar = () => {
     const [bonuspopup, setbonuspopup] = useState(false);
     //----------menu-item---------------------------------
     const [menuOpen, setMenuOpen] = useState(false);
+
+    // -------------close popup-------------
+    const handleclosepopup=()=>{
+     setPopupOpen(false);
+     setTransactionAmount("")
+    }
   return (
    <section className="font-bai w-[20%] xl:block hidden h-screen bg-gray-900 pb-[20px] overflow-y-auto no-scrollbar z-[10000] sticky top-0">
     {/* ----------------------sidebar------------------------- */}
@@ -384,7 +392,7 @@ const Sidebar = () => {
             </button>
             :   <button
         onClick={()=>{setModalOpen(true)}}
-        className="w-full bg-bg2 text-white py-2 rounded-lg font-semibold"
+         className="w-full bg-gradient-to-r from-blue-500 via-pink-500 to-orange-500 text-white py-3 rounded-md font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
       >
         Deposit
       </button>
@@ -394,7 +402,7 @@ const Sidebar = () => {
           <div className="bg-gray-900 text-white p-6 rounded-lg w-96 shadow-lg">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Wallet</h2>
-              <button onClick={() => setPopupOpen(false)} className="text-white text-xl">✕</button>
+              <button onClick={handleclosepopup} className="text-white text-xl">✕</button>
             </div>
             {!selectedMethod ? (
               <>

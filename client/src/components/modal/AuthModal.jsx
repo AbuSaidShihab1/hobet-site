@@ -61,7 +61,8 @@ const CurrencySelector = ({ selectedCurrency, setSelectedCurrency }) => {
 
 
 const AuthModal = ({ isOpen, onClose }) => {
-  const base_url=import.meta.env.VITE_BASE_URL;
+  const base_url="https://hobet-site.onrender.com";
+
   const [activeTab, setActiveTab] = useState("signin");
   const navigate=useNavigate();
   

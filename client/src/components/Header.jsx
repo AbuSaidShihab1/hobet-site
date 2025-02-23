@@ -7,14 +7,14 @@ import { NavLink, useNavigate } from 'react-router';
 import AuthModal from './modal/AuthModal';
 import { BsChatDotsFill } from "react-icons/bs";
 import { motion } from "framer-motion";
-
+import Confetti from 'react-confetti';
 import Logo from './Logo';
 const Header = () => {
   const user_info=JSON.parse(localStorage.getItem("user"))
  const [wifiSpeed, setWifiSpeed] = useState(null);
  const [dropdownOpen, setDropdownOpen] = useState(false);
  const [isModalOpen, setModalOpen] = useState(false);
- const base_url=import.meta.env.VITE_BASE_URL;
+ const base_url="https://hobet-site.onrender.com";
 
   const navigate=useNavigate();
     useEffect(() => {
@@ -63,6 +63,7 @@ const Header = () => {
 
     }
     const [isOpen, setIsOpen] = useState(false);
+    // ----------------welcome-animation-------------------
   return (
     <div className='xl:py-[20px]'>
     <div className="bg-gray-800 border-[2px] hidden xl:flex border-gray-700 rounded-[5px] text-white p-4  justify-between items-center">
@@ -185,8 +186,8 @@ const Header = () => {
       )}
     </div>
       </div>: <div className="flex items-center space-x-5">
-      <div className="flex-1 text-center">
-        <img className='w-[30px] h-[30px] rounded-full' src="https://cdn.britannica.com/44/344-050-94536674/Flag-England.jpg" alt="" />
+      <div className="relative w-[40px] h-[40px] bg-green-600 flex items-center justify-center rounded-full shadow-lg">
+        <div className="w-[20px] h-[20px] bg-red-600 rounded-full"></div>
       </div>
         {/* Login / Sign Up */}
         <div className="flex space-x-2">

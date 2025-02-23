@@ -18,7 +18,8 @@ const GamePopup = ({ setIsOpen }) => {
     const { width, height } = useWindowSize(); 
     const [showWinPopup, setShowWinPopup] = useState(false);
     const [showLosePopup, setShowLosePopup] = useState(false);
-    const base_url=import.meta.env.VITE_BASE_URL;
+    const base_url="https://hobet-site.onrender.com";
+
 
     const options = [
         { name: "rock", img: "https://script.viserlab.com/xaxino/demo/assets/templates/basic//images/play/rock.png" },

@@ -7,7 +7,8 @@ const SpinGamePopup = ({ setIsOpen }) => {
   const [balance, setBalance] = useState(0.5);
   const [isSpinning, setIsSpinning] = useState(false);
   const [winningColor, setWinningColor] = useState(null);
-  const base_url=import.meta.env.VITE_BASE_URL;
+  const base_url="https://hobet-site.onrender.com";
+
 
   const handleColorSelection = (color) => {
     setSelectedColor(color);
