@@ -8,7 +8,7 @@ import { FaBars, FaTimes, FaUser, FaHeart, FaGift, FaCrown, FaTh, FaBolt, FaTrop
 import Header from "../../components/Header";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
-const AccountDashboard = () => {
+const Profile = () => {
   const [activeTab, setActiveTab] = useState("my-account");
  const [wifiSpeed, setWifiSpeed] = useState(null);
  const [selectedFilters, setSelectedFilters] = useState([]);
@@ -355,4 +355,4 @@ const filteredTransactions = transactionsData.filter((transaction) =>
   );
 };
 
-export default AccountDashboard;
+export default Profile;

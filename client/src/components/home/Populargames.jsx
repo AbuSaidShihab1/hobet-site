@@ -13,12 +13,12 @@ const Populargames = () => {
     const [categoires,set_categories]=useState([
         {
             id:1,
-            image:"https://script.viserlab.com/xaxino/demo/assets/images/game/6592b9b5aace01704114613.png",
+            image:"https://backend.careers-amusnet.com//sites/default/files/games/470_3.webp",
             slug:"head_tail"
         },
         {
             id:2,
-            image:"https://script.viserlab.com/xaxino/demo/assets/images/game/61051d8469d731627725188.jpg",
+            image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh1hcq-9t252lHyIKjiNSRY38jFOhkbc27y4p2cTN_BBmgRzI838R9d6cT-9KM6Jv1lRA&usqp=CAU",
             slug:"spin_game"
         },
         {

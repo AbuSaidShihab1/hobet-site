@@ -38,7 +38,6 @@ const tabs = [
   { label: "Table", icon: <FaStopwatch /> },
 ];
 const Hero = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
  const [wifiSpeed, setWifiSpeed] = useState(null);
 
 
@@ -67,12 +66,22 @@ const Hero = () => {
     "https://elon.casino/icons-elon/games/2.png", // Popular game image
   ];
 
+
+  const [activeTab, setActiveTab] = useState("Asia");
+  const swiperRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % banners.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
+
   const handleDotClick = (index) => {
     setActiveIndex(index);
   };
-  const [activeTab, setActiveTab] = useState("Asia");
-  const swiperRef = useRef(null);
-   
   return (
    <section className='w-[100%] xl:w-[80%] xl:px-[20px] no-scrollbar   xl:py-[20px] '>
       <Header/>
@@ -82,20 +91,26 @@ const Hero = () => {
         <div className="xl:bg-gray-800 px-[10px] py-[20px] xl:p-[30px] xl:border-[2px] border-gray-700 rounded-lg overflow-hidden text-white">
       {/* Banner Section */}
       <div className="relative">
-        <img src={banners[activeIndex]} alt="Banner" className="w-full h-[200px] xl:h-[400px] object-cover rounded-lg" />
-        {/* Slider Navigation */}
-        <div className="absolute bottom-[-8%] left-0 right-0 flex justify-center">
-          <div className="flex space-x-2">
-            {banners.map((_, index) => (
-              <FaCircle
-                key={index}
-                className={`text-bg6 text-[10px] xl:text-[12px] cursor-pointer ${index === activeIndex ? 'text-bg3' : 'text-opacity-50'}`}
-                onClick={() => handleDotClick(index)}
-              />
-            ))}
-          </div>
+      <img
+        src={banners[activeIndex]}
+        alt="Banner"
+        className="w-full h-[200px] xl:h-[400px] object-cover rounded-lg transition-opacity duration-500"
+      />
+      {/* Slider Navigation */}
+      <div className="absolute bottom-[-8%] left-0 right-0 flex justify-center">
+        <div className="flex space-x-2">
+          {banners.map((_, index) => (
+            <FaCircle
+              key={index}
+              className={`text-bg6 text-[10px] xl:text-[12px] cursor-pointer transition-opacity duration-300 ${
+                index === activeIndex ? "text-bg3 opacity-100" : "opacity-50"
+              }`}
+              onClick={() => handleDotClick(index)}
+            />
+          ))}
         </div>
       </div>
+    </div>
       <div className="w-full items-center  py-4 mt-[30px] ">
 
       <Swiper
