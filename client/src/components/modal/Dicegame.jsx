@@ -7,6 +7,7 @@ const Dicegame = ({ setIsOpen }) => {
     const [balance, setBalance] = useState(0.5);
     const [diceResult, setDiceResult] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const base_url=import.meta.env.VITE_BASE_URL;
 
     const diceImages = [
         "https://script.viserlab.com/xaxino/demo/assets/templates/basic/images/play/dice1.png",

@@ -6,12 +6,15 @@ import toast, { Toaster } from 'react-hot-toast';
 import { NavLink, useNavigate } from 'react-router';
 import AuthModal from './modal/AuthModal';
 import { BsChatDotsFill } from "react-icons/bs";
+import { motion } from "framer-motion";
+
 import Logo from './Logo';
 const Header = () => {
   const user_info=JSON.parse(localStorage.getItem("user"))
  const [wifiSpeed, setWifiSpeed] = useState(null);
  const [dropdownOpen, setDropdownOpen] = useState(false);
  const [isModalOpen, setModalOpen] = useState(false);
+ const base_url=import.meta.env.VITE_BASE_URL;
 
   const navigate=useNavigate();
     useEffect(() => {
@@ -31,7 +34,7 @@ const Header = () => {
     }, []);
     const [user_details,set_userdetails]=useState([])
     const user_data=()=>{
-      axios.get(`http://localhost:8080/auth/user/${user_info?._id}`)
+      axios.get(`${base_url}/auth/user/${user_info?._id}`)
       .then((res)=>{
         console.log(res)
         if(res.data.success){
@@ -59,12 +62,42 @@ const Header = () => {
       setModalOpen(true);
 
     }
+    const [isOpen, setIsOpen] = useState(false);
   return (
     <div className='xl:py-[20px]'>
     <div className="bg-gray-800 border-[2px] hidden xl:flex border-gray-700 rounded-[5px] text-white p-4  justify-between items-center">
       {/* Left side - Flag and Menu */}
-      <div className="fixed bottom-6 right-6 flex z-[100] items-center justify-center w-14 h-14 bg-gradient-to-b from-blue-500 to-blue-700 rounded-full shadow-lg cursor-pointer hover:scale-105 transition-transform">
-      <BsChatDotsFill className="text-white text-2xl" />
+      <div className="fixed bottom-6 right-6 z-50">
+      {isOpen ? (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          transition={{ duration: 0.3 }}
+          className="w-80 h-96 bg-white shadow-lg rounded-lg overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-4 text-white flex justify-between items-center">
+            <span className="font-semibold">Welcome to Hobet Games 👋</span>
+            <button onClick={() => setIsOpen(false)} className="text-lg">✖</button>
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto">We reply immediately</div>
+          <div className="p-2 border-t flex items-center">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              className="flex-1 p-2 border text-gray-700 rounded-md focus:outline-none"
+            />
+            <button className="ml-2 p-2 bg-blue-500 text-white rounded-lg">➤</button>
+          </div>
+        </motion.div>
+      ) : (
+        <div
+          onClick={() => setIsOpen(true)}
+          className="flex items-center justify-center w-14 h-14 bg-gradient-to-b from-blue-500 to-blue-700 rounded-full shadow-lg cursor-pointer hover:scale-105 transition-transform"
+        >
+          <BsChatDotsFill className="text-white text-2xl" />
+        </div>
+      )}
     </div>
       <div className="flex items-center space-x-4">
               {/* Wi-Fi Speed Display */}
@@ -120,7 +153,7 @@ const Header = () => {
         <h2 className="text-[18px] font-[500]">{user_info.name}</h2>
       </div>
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-gray-800 border-[2px] border-gray-700 z-[100] rounded-lg shadow-lg">
+        <div className="absolute right-0 mt-2 w-[250px] bg-gray-800 border-[2px] border-gray-700 z-[100] rounded-lg shadow-lg">
           <div className="p-4 border-b border-gray-700">
             <p className="font-semibold">{user_info.name}</p>
             <p className="text-sm text-orange-400">{user_info.email}</p>

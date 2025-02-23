@@ -4,6 +4,7 @@ import { FaUser, FaLock } from "react-icons/fa";
 import toast, { Toaster } from 'react-hot-toast';
 export default function AdminLogin() {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const base_url=import.meta.env.VITE_API_KEY_Base_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -12,7 +13,7 @@ export default function AdminLogin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/auth/admin-login", formData).then((res) => { 
+    axios.post(`${base_url}/auth/admin-login`, formData).then((res) => { 
     if(res.data.success){
       toast.success("Success", res.data.message, "success");
       localStorage.setItem("admin-token", res.data.jwtToken);

@@ -11,10 +11,6 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
-    phone:{
-        type: String,
-        required: true,
-    },
     player_id:{
         type: String,
         required: true,

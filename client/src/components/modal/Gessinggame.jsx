@@ -9,6 +9,7 @@ const Gessinggame = ({ setIsOpen }) => {
     const [result, setResult] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [runningColors, setRunningColors] = useState([]);
+    const base_url=import.meta.env.VITE_BASE_URL;
 
     const numbers = [1, 2, 3, 4, 5, 6, 7];
     const colors = ['bg-green-500', 'bg-purple-500', 'bg-red-500'];

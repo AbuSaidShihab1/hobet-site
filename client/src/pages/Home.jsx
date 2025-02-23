@@ -6,10 +6,15 @@ import Sidebar from '../components/Sidebar'
 
 const Home = () => {
   return (
-    <section className='w-full h-full bg-dark_theme flex justify-center font-bai'>
+    <section>
+    <section className='w-full h-full bg-dark_theme  flex justify-center font-bai'>
           <Sidebar/>
           <Hero/>
     </section>
+    <Footer/>
+
+    </section>
+
   )
 }
 

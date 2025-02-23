@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const base_url=import.meta.env.VITE_API_KEY_Base_URL
+  const base_url=import.meta.env.VITE_API_KEY_Base_URL;
   const navigate=useNavigate();
   const validate = () => {
     let tempErrors = {};

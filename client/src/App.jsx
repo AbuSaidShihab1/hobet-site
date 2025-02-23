@@ -7,6 +7,9 @@ import Registration from './pages/Registration'
 import AccountDashboard from './pages/user/Accountdashboard'
 import Games from './pages/Games'
 import Favourites from './pages/user/Favourites'
+import Popular from './pages/games/Popular'
+import Casino from './pages/games/Casino'
+import Others from './pages/games/Others'
 const App = () => {
   return (
     <BrowserRouter>
@@ -19,6 +22,9 @@ const App = () => {
         {/* ----------user-pgaes------------------- */}
 
         <Route exact path="/profile" element={<AccountDashboard/>}/>  
+        <Route exact path="/popular" element={<Popular/>}/>  
+        <Route exact path="/casino" element={<Casino/>}/>  
+        <Route exact path="/others" element={<Others/>}/>  
         <Route exact path="/favourites" element={<Favourites/>}/> 
 
 

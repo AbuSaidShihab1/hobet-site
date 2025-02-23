@@ -18,6 +18,8 @@ const GamePopup = ({ setIsOpen }) => {
     const { width, height } = useWindowSize(); 
     const [showWinPopup, setShowWinPopup] = useState(false);
     const [showLosePopup, setShowLosePopup] = useState(false);
+    const base_url=import.meta.env.VITE_BASE_URL;
+
     const options = [
         { name: "rock", img: "https://script.viserlab.com/xaxino/demo/assets/templates/basic//images/play/rock.png" },
         { name: "paper", img: "https://script.viserlab.com/xaxino/demo/assets/templates/basic//images/play/paper.png" },
@@ -63,7 +65,7 @@ const GamePopup = ({ setIsOpen }) => {
             return;
         }
     
-        axios.put(`http://localhost:8080/user/after-play-minus-balance`, { betAmount, player_id: user_details.player_id })
+        axios.put(`${base_url}/user/after-play-minus-balance`, { betAmount, player_id: user_details.player_id })
             .then((res) => {
                 console.log(res);
                 user_data();
@@ -102,7 +104,7 @@ const GamePopup = ({ setIsOpen }) => {
                 const winAmount = betAmount * 1.2; // 20% extra on win
                 setBalance(balance + winAmount);  // Update balance with the win amount
                 setNewTotalAmount(balance + winAmount); // Set the new total amount in the new state
-                axios.put(`http://localhost:8080/user/after-wind-add-balance`, { winAmount, player_id: user_details.player_id })
+                axios.put(`${base_url}/user/after-wind-add-balance`, { winAmount, player_id: user_details.player_id })
                 .then((res) => {
                     console.log(res);
                     user_data();
@@ -124,7 +126,7 @@ const GamePopup = ({ setIsOpen }) => {
 // --------------------gaming-popup---------------------------
 const [user_details,set_userdetails]=useState([])
 const user_data=()=>{
-  axios.get(`http://localhost:8080/auth/user/${user_info?._id}`)
+  axios.get(`${base_url}/auth/user/${user_info?._id}`)
   .then((res)=>{
     console.log(res)
     if(res.data.success){

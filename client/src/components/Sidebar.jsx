@@ -8,14 +8,30 @@ import AuthModal from "./modal/AuthModal";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { nanoid } from "nanoid";
+import { GiFireBowl } from "react-icons/gi";
+import { CgCardSpades } from "react-icons/cg";
 import axios from "axios";
+import { RiCouponLine } from "react-icons/ri";
 import Swal from "sweetalert2";
+import { IoClose } from "react-icons/io5";
 import toast, { Toaster } from 'react-hot-toast';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use"; // To get screen size for confetti
 import Logo from "./Logo";
 import { ca } from "date-fns/locale";
 
+const providers = [
+  { name: "AmigoGaming", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amigogaming.svg" },
+  { name: "Amusnet", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amusnet.svg" },
+  { name: "Betsoft", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/betsoft.svg" },
+  { name: "AmigoGaming", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amigogaming.svg" },
+  { name: "Amusnet", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amusnet.svg" },
+  { name: "Betsoft", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/betsoft.svg" },
+  { name: "AmigoGaming", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amigogaming.svg" },
+  { name: "Amusnet", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amusnet.svg" },
+  { name: "Betsoft", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/betsoft.svg" }
+];
 const paymentMethods = {
     deposit: [
       { name: "Bkash", src: "https://elon.casino/icons-elon/payments/218.svg" },
@@ -49,6 +65,10 @@ const Sidebar = () => {
   const [paymnet_id,set_paymentid]=useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const { width, height } = useWindowSize(); // Get window size for confetti
+  const base_url=import.meta.env.VITE_BASE_URL;
+  const base_url2=import.meta.env.VITE_BASE_URL2;
+  const merchant_name="hobet"
+
   useEffect(() => {
     setOrderId(nanoid(8));
   }, []);
@@ -60,7 +80,7 @@ const Sidebar = () => {
   };
   const [random_agent,set_radom_agent]=useState([]);
   const random_agent_number=()=>{
-      axios.get(`http://localhost:6001/api/user/checkout-page-agent/shihab`)
+      axios.get(`${base_url2}/api/user/checkout-page-agent/${merchant_name}`)
       .then((res)=>{
         console.log(res.data);
         set_radom_agent(res.data)
@@ -77,7 +97,7 @@ const Sidebar = () => {
 
   const [user_details,set_userdetails]=useState([])
   const user_data=()=>{
-    axios.get(`http://localhost:8080/auth/user/${user_info?._id}`)
+    axios.get(`${base_url}/auth/user/${user_info?._id}`)
     .then((res)=>{
       console.log(res)
       if(res.data.success){
@@ -136,7 +156,7 @@ const Sidebar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    axios.post(`http://localhost:6001/api/payment/paymentSubmit`, {
+    axios.post(`${base_url2}/api/payment/paymentSubmit`, {
       paymentId: paymnet_id,
       provider: "bkash",
       agentAccount: agentNumber,
@@ -146,7 +166,7 @@ const Sidebar = () => {
     .then((res) => {
       console.log(res.data);
       if (res.data.success) {
-        axios.put(`http://localhost:8080/auth/update-user-balance/${user_info._id}`,{amount})
+        axios.put(`${base_url2}/auth/update-user-balance/${user_info._id}`,{amount})
         .then((res)=>{
           console.log(res)
         }).catch((err)=>{
@@ -200,7 +220,7 @@ const Sidebar = () => {
 
     // If all validations pass
     try {
-      const {data} = await axios.post(`http://localhost:6001/api/payment/bkash`,{mid:"merchant1",payerId:user_details.player_id,amount:transactionAmount,currency:"BDT",redirectUrl:"https://www.babu88.com",orderId:orderId,callbackUrl:"https://admin.eassypay.com/bkash_api"});
+      const {data} = await axios.post(`${base_url2}/api/payment/bkash`,{mid:"merchant1",payerId:user_details.player_id,amount:transactionAmount,currency:"BDT",redirectUrl:"https://www.babu88.com",orderId:orderId,callbackUrl:"https://admin.eassypay.com/bkash_api"});
       window.location.href = data.link;
       console.log(data)
       if (data.status === 200) {
@@ -270,7 +290,7 @@ const Sidebar = () => {
       setLoading(true);
     
       axios
-        .post(`http://localhost:6001/api/payment/payout`, {
+        .post(`${base_url2}/api/payment/payout`, {
           mid: "shihab",
           provider: selectedMethod.name,
           amount: amount,
@@ -284,9 +304,8 @@ const Sidebar = () => {
           console.log(res.data);
           if (res.data.success) {
             user_data();
-
             axios
-              .put(`http://localhost:8080/user/after-withdraw-minus-balance`, {
+              .put(`${base_url}/user/after-withdraw-minus-balance`, {
                 amount: transactionAmount,
                 player_id: user_info.player_id
               })
@@ -322,23 +341,26 @@ const Sidebar = () => {
     
       setLoading(false);
     };
-    
+    // ---------bonus-sidebar------------------
+    const [bonuspopup, setbonuspopup] = useState(false);
+    //----------menu-item---------------------------------
+    const [menuOpen, setMenuOpen] = useState(false);
   return (
-   <section className="font-bai w-[20%] xl:block hidden">
+   <section className="font-bai w-[20%] xl:block hidden h-screen bg-gray-900 pb-[20px] overflow-y-auto no-scrollbar z-[10000] sticky top-0">
     {/* ----------------------sidebar------------------------- */}
          <section className="w-full">
 
             <Toaster/>
          <div className={`h-screen bg-gray-900 text-white p-4 flex flex-col relative transition-all duration-300 ${isOpen ? "w-full" : "w-20"}`}>
-      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#023e8a] via-[#48cae4] to-[#00b4d8] blur-3xl opacity-50"></div>
-      <button 
+      {/* <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#023e8a] via-[#48cae4] to-[#00b4d8] blur-3xl opacity-50"></div> */}
+      {/* <button 
         className="absolute top-4 right-4 text-white text-2xl focus:outline-none"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <FaTimes /> : <FaBars />}
-      </button>
+      </button> */}
     <Logo/>
-      <div className="flex space-x-2 bg-gray-800 p-2 rounded-lg mb-4 mt-6">
+      {/* <div className="flex space-x-2 bg-gray-800 p-2 rounded-lg mb-4 mt-6">
         <button 
           className={`w-1/2 text-center py-2 rounded-lg border-2 transition-all duration-300 ${activeTab === "casino" ? "bg-bg1 text-white border-bg2" : "text-gray-400 border-transparent hover:border-gray-400"}`}
           onClick={() => setActiveTab("casino")}
@@ -349,17 +371,18 @@ const Sidebar = () => {
           className={`w-1/2 text-center py-2 rounded-lg border-2 transition-all duration-300 ${activeTab === "sportsbook" ? "bg-bg1 text-white border-bg2" : "text-gray-400 border-transparent hover:border-gray-400"}`}
           onClick={() => setActiveTab("sportsbook")}
         >Sportsbook</button>
-      </div>
+      </div> */}
 
           {/* ---------------------deposit-button------------------------ */}
-          <div className="flex flex-col items-center mb-[10px]">
+          <div className="flex flex-col items-center mb-[15px] mt-[25px]">
             {
-              user_info ?    <button
+              user_info ?   <button
               onClick={() => setPopupOpen(true)}
-              className="w-full bg-bg2 text-white py-2 rounded-lg font-semibold"
+              className="w-full bg-gradient-to-r from-blue-500 via-pink-500 to-orange-500 text-white py-3 rounded-md font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
             >
               Deposit
-            </button>:   <button
+            </button>
+            :   <button
         onClick={()=>{setModalOpen(true)}}
         className="w-full bg-bg2 text-white py-2 rounded-lg font-semibold"
       >
@@ -367,7 +390,7 @@ const Sidebar = () => {
       </button>
             }
       {popupOpen && (
-        <div className="fixed inset-0 flex items-center z-[1000] justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center z-[100000000000000] justify-center bg-black bg-opacity-50">
           <div className="bg-gray-900 text-white p-6 rounded-lg w-96 shadow-lg">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Wallet</h2>
@@ -567,22 +590,22 @@ const Sidebar = () => {
 
 )}
           {/* ---------------------deposit button-------------------- */}
-      <ul className="space-y-2">
+      <ul className="space-y-2 sidebar_menu">
         {
           user_info ?  <li  >
-          <NavLink to="/profile" className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+          <NavLink to="/profile" className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
           <FaUser />
                <span>My Account</span>
           </NavLink>
        
-        </li>: <li onClick={()=>{setModalOpen(true)}} className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+        </li>: <li onClick={()=>{setModalOpen(true)}} className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
     <FaUser />
     {isOpen && <span>My Account</span>}
   </li>
         }
  
   <li >
-  <NavLink to="/favourites" className="flex items-center space-x-2 p-2 mb-[10px] bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+  <NavLink to="/favourites" className="flex items-center space-x-2 p-2 mb-[10px] bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
     
     <FaHeart />
     {isOpen && <span>Favorites</span>}
@@ -590,27 +613,111 @@ const Sidebar = () => {
 
   </li>
 
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaGift />
-    {isOpen && <span>Bonuses</span>}
-  </li>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaCrown />
-    {isOpen && <span>VIP Club</span>}
-  </li>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaTh />
-    {isOpen && <span>Providers</span>}
-  </li>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaBolt />
-    {isOpen && <span>Promotions</span>}
-  </li>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+<NavLink to="/popular"className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+<GiFireBowl />
+{isOpen && <span>Popular</span>}
+</NavLink>
+<NavLink to="/casino" className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+   <CgCardSpades />
+    {isOpen && <span>Casino</span>}
+</NavLink>
+<NavLink to="/others"className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+<RiCouponLine />
+{isOpen && <span>Others</span>}
+</NavLink>
+<div className="w-full bg-gray-900 text-white rounded-lg">
+      <div
+        className="flex items-center justify-between p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <div className="flex items-center space-x-2">
+          <FaTh />
+          <span>Providers</span>
+        </div>
+        {menuOpen ? <FaChevronUp /> : <FaChevronDown />}
+      </div>
+
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: menuOpen ? "auto" : 0, opacity: menuOpen ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        <ul className="custom-scrollbar mt-2 space-y-2 max-h-[300px] overflow-y-auto">
+          {providers.map((provider, index) => (
+            <li key={index} className="flex items-center space-x-2 p-2 bg-gray-800 rounded-md hover:bg-gray-700 cursor-pointer">
+              <img src={provider.logo} alt={provider.name} className="w-6 h-6" />
+              <span>{provider.name}</span>
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+    </div>
+  <div className="relative">
+      {/* Bonus Button */}
+      <li
+        className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer"
+        onClick={() => setbonuspopup(true)}
+      >
+        <FaBolt />
+        <span>Bonus</span>
+      </li>
+      
+      {/* Popup */}
+      {bonuspopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-900 text-white p-6 rounded-lg w-[30%] relative shadow-lg">
+            <button className="absolute top-3 right-3 text-white" onClick={() => setbonuspopup(false)}>
+              <IoClose size={24} />
+            </button>
+            <h2 className="text-xl font-bold text-center">Bonuses</h2>
+            <div className="mt-4 bg-black p-4 rounded-md shadow-lg shadow-indigo-500/20">
+  <div className="flex justify-between items-center py-[10px]">
+    <p className="text-[17px] text-white">Your VIP Progress</p>
+    <p className="text-sm text-gray-300">5%</p>
+  </div>
+
+  {/* Progress Bar */}
+  <div className="w-full bg-gray-700 h-2 rounded-full mt-1 relative overflow-hidden">
+    <div className="h-2 rounded-full w-[5%] bg-gradient-to-r from-green-400 to-blue-500 animate-pulse"></div>
+  </div>
+
+  <p className="text-[16px] text-gray-400 mt-2">Next level: Bronze</p>
+  <p className="mt-[10px] text-[16px] leading-[25px] text-gray-300">
+    When you reach the next level, you will immediately receive a Next Level Bonus. Also, when you reach a new level, you can contact Customer Support and request a Special Bonus from Support.
+  </p>
+</div>
+
+            <div className="mt-4 p-4 rounded-md bg-gradient-to-br from-blue-500 to-indigo-700 shadow-lg shadow-indigo-500/50">
+  <div className="mb-[10px]">
+    <p className="text-[20px] font-semibold text-left mb-[5px] text-white">Rakeback</p>
+    <p className="text-[16px] text-gray-200">We return up to 5% of casino income to you.</p>
+  </div>
+  <button className="mt-2 px-4 py-2 w-full rounded-md bg-gradient-to-r from-blue-400 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/50 transition-transform transform hover:scale-105 hover:shadow-indigo-500/70">
+    Claim
+  </button>
+</div>
+
+<div className="mt-4 p-4 rounded-xl bg-gray-900 border border-indigo-500 shadow-lg shadow-indigo-500/50 relative overflow-hidden">
+  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-blue-500/10 blur-xl"></div>
+  <div className="relative z-10">
+    <p className="text-[20px] font-semibold text-left mb-[5px] text-white uppercase">Rakeback</p>
+    <p className="text-[16px] text-gray-300">We return up to 5% of casino income to you.</p>
+    <button className="mt-4 px-4 py-2 w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/50 hover:scale-105 transition-transform hover:shadow-indigo-400/70">
+      Claim
+    </button>
+  </div>
+</div>
+
+          </div>
+        </div>
+      )}
+    </div>
+  <li className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
     <FaTrophy />
     {isOpen && <span>Battles</span>}
   </li>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 rounded-lg border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
+  <li className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
     <FaMobileAlt />
     {isOpen && <span>Mobile App</span>}
   </li>

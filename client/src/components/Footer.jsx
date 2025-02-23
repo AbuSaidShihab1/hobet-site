@@ -1,54 +1,85 @@
-import React from "react";
+import { useState } from "react";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
-const Footer = () => {
+const AccordionItem = ({ title, content, slug, isOpen, toggle }) => {
   return (
-    <footer className="bg-gray-900 text-white py-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Left Section */}
-          <div>
-            <h2 className="text-lg font-bold">BABU88 | দক্ষিণ এশিয়ায় বিশ্বস্ত অনলাইন ক্যাসিনো | বাংলাদেশ, ভারত, নেপাল, শ্রীলঙ্কা</h2>
-            <p className="text-sm mt-2">
-              BABU88 হল একটি অনলাইন বাজি কোম্পানি, যা বিভিন্ন পরিচিত বাজি এবং ক্যাসিনো বিস্তৃতির অংশ।
-            </p>
-            <img
-              src="https://www.babu88h.com/static/image/footer/babu88-official.png"
-              alt="Babu88 Official"
-              className="mt-4 w-32"
-            />
-          </div>
-          {/* Middle Section */}
-          <div>
-            <h2 className="text-lg font-bold">অফিসিয়াল পার্টনার এবং স্পন্সর</h2>
-            <div className="flex space-x-4 mt-4">
-              <img src="https://www.babu88h.com/static/image/footer/partner1.png" alt="Partner 1" className="w-20" />
-              <img src="https://www.babu88h.com/static/image/footer/partner2.png" alt="Partner 2" className="w-20" />
-              <img src="https://www.babu88h.com/static/image/footer/partner3.png" alt="Partner 3" className="w-20" />
-            </div>
-          </div>
-          {/* Right Section */}
-          <div>
-            <h2 className="text-lg font-bold">আমাদের অনুসরণ করুন</h2>
-            <div className="flex space-x-4 mt-4">
-              <img src="https://www.babu88h.com/static/svg/hover_btm-fb.svg" alt="Facebook" className="w-8" />
-              <img src="https://www.babu88h.com/static/svg/hover_btm-ig.svg" alt="Instagram" className="w-8" />
-              <img src="https://www.babu88h.com/static/svg/hover_btm-yt.svg" alt="YouTube" className="w-8" />
-            </div>
-            <h2 className="text-lg font-bold mt-4">মূল্যপরিশোধ পদ্ধতি</h2>
-            <div className="flex space-x-4 mt-4">
-              <img src="https://www.babu88h.com/static/image/footer/icon_footer_bkash_colour.svg" alt="Bkash" className="w-16" />
-              <img src="https://www.babu88h.com/static/image/footer/icon_footer_nagad_colour.svg" alt="Nagad" className="w-16" />
-              <img src="https://www.babu88h.com/static/image/footer/icon_footer_rocket_colour.svg" alt="Rocket" className="w-16" />
-              <img src="https://www.babu88h.com/static/image/footer/icon_footer_upay_colour.svg" alt="Upay" className="w-16" />
-            </div>
-          </div>
+    <div className="border border-gray-700 rounded-lg mb-2 bg-[#1F222F] text-white">
+      <button
+        className="flex justify-between w-full p-4 text-lg font-semibold"
+        onClick={toggle}
+      >
+        {title}
+        {isOpen ? <FiChevronUp /> : <FiChevronDown />}
+      </button>
+      {isOpen && (
+        <div className="p-4 border-t border-gray-700">
+          <ul className="mt-2 space-y-1 text-gray-300">
+            {content.map((item, index) => (
+              <li key={index}>
+                <Link to={`/${slug}/${item.replace(/\s+/g, '-').toLowerCase()}`} className="hover:underline">{item}</Link>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="text-center text-sm text-gray-400 mt-8 border-t border-gray-700 pt-4">
-          কপিরাইট © 2025 | ব্র্যান্ড | সমস্ত অধিকার সংরক্ষিত
-        </div>
-      </div>
-    </footer>
+      )}
+    </div>
   );
 };
 
-export default Footer;
+export default function Footer() {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleAccordion = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const accordionData = [
+    {
+      title: "Documents",
+      slug: "documents",
+      content: ["Terms and conditions", "Betting rules", "Privacy policy"],
+    },
+    {
+      title: "For Clients",
+      slug: "for-clients",
+      content: ["Client Agreements", "Service Terms", "Support Information"],
+    },
+    {
+      title: "Promotions",
+      slug: "promotions",
+      content: ["Elon Battles", "Bonus Offers", "Special Events"],
+    },
+  ];
+
+  return (
+    <div className=" bg-[#171924] font-bai text-white flex flex-col items-center p-8">
+    
+      <div className="w-full">
+      <h1 className="text-[16px] xl:text-[17px] text-left font-bold mb-6">Documents</h1>
+        {accordionData.map((item, index) => (
+          <AccordionItem
+            key={index}
+            title={item.title}
+            slug={item.slug}
+            content={item.content}
+            isOpen={openIndex === index}
+            toggle={() => toggleAccordion(index)}
+          />
+        ))}
+      </div>
+      <footer className="mt-10 text-gray-400 text-sm text-center">
+        <p>
+          18+. Copyright &copy; 2023 Elon is owned by Sknet Tech Ltd., a limited
+          liability company registered in Belize with company registration
+          number 000042585, licensed in the State of Anjouan under the Computer
+          Gaming Licensing Act 007 of 2005.
+        </p>
+        <p className="mt-2">
+          By accessing this site, you accept that we use cookies to improve your
+          experience.
+        </p>
+      </footer>
+    </div>
+  );
+}

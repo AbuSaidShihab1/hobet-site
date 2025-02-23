@@ -7,19 +7,20 @@ import { FaArrowRight, FaCircle } from "react-icons/fa"; // for dot navigation
 import { FaUserCircle, FaQuestionCircle } from "react-icons/fa"; 
 import { FaBars, FaTimes, FaUser, FaHeart, FaGift, FaCrown, FaTh, FaBolt, FaTrophy, FaMobileAlt, FaFacebook, FaInstagram, FaTelegram, FaEnvelope, FaWifi } from "react-icons/fa";
 import { BiSupport } from "react-icons/bi";
-import Populargames from './Populargames';
-import Originalgame from './Originalgame';
-import Providers from './Providers';
-import Gameshows from './Gameshows';
+
 import { FaYinYang, FaStar, FaRocket,FaStopwatch} from "react-icons/fa";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import Header from '../Header';
-import Loader from '../Loader';
-import Strikegames from './Strikegames';
+
 import banner1 from "../../assets/banner1.webp"
 import banner2 from "../../assets/banner2.webp"
 import banner3 from "../../assets/banner3.webp"
-import GameTable from './GameTable';
+import banner4 from "../../assets/banner4.webp"
+
+import Populargames from '../home/Populargames';
+import Originalgame from '../home/Originalgame';
+import Header from '../Header';
+import Cgamesbox from './Cgamebox';
+import GameTable from '../home/GameTable';
 const tabs = [
   { label: "Asia", icon: <FaYinYang /> },
   { label: "Popular", icon: <FaStar /> },
@@ -37,7 +38,7 @@ const tabs = [
   { label: "Instant", icon: <FaBolt /> },
   { label: "Table", icon: <FaStopwatch /> },
 ];
-const Hero = () => {
+const Chero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
  const [wifiSpeed, setWifiSpeed] = useState(null);
 
@@ -58,7 +59,7 @@ const Hero = () => {
       }
     }, []);
   const banners = [
-    banner1,
+    banner3,
     banner2, // Use other banners if needed
     banner3
   ];
@@ -76,7 +77,8 @@ const Hero = () => {
   return (
    <section className='w-[100%] xl:w-[80%] xl:px-[20px] no-scrollbar   xl:py-[20px] '>
       <Header/>
-      {/* <Loader/> */}
+      
+            {/* <Loader/> */}
 
         {/* Main Content */}
         <div className="xl:bg-gray-800 px-[10px] py-[20px] xl:p-[30px] xl:border-[2px] border-gray-700 rounded-lg overflow-hidden text-white">
@@ -96,71 +98,13 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      <div className="w-full items-center  py-4 mt-[30px] ">
-
-      <Swiper
-  slidesPerView={3}
-  pagination={{
-    clickable: true,
-  }}
-  breakpoints={{
-    300: {
-      slidesPerView: 4,
-      spaceBetween: 10,
-    },
-    640: {
-      slidesPerView: 4,
-      spaceBetween: 10,
-    },
-    768: {
-      slidesPerView: 5,
-      spaceBetween: 12,
-    },
-    1024: {
-      slidesPerView: 12,
-      spaceBetween: 10,
-    },
-    1300: {
-      slidesPerView: 12,
-      spaceBetween: 10,
-    },
-  }}
-  className="mySwiper w-full"
-  modules={[Autoplay]}
-  autoplay
-  ref={swiperRef}
-  navigation={false} // Disable default navigation since we're using custom buttons
->
-  {tabs.map((tab) => (
-    <SwiperSlide key={tab.id} className="w-full cursor-pointer">
-      <button
-        key={tab.label}
-        onClick={() => setActiveTab(tab.label)}
-        className={`flex items-center space-x-2 px-4 py-[10px] rounded-md text-gray-400 hover:text-white transition-all w-full ${
-          activeTab === tab.label ? " text-white" : ""
-        }`}
-      >
-        <span className="text-[13px] xl:text-[22px]">{tab.icon}</span>
-        <span className="text-[12px] xl:text-[17px]">{tab.label}</span>
-      </button>
-    </SwiperSlide>
-  ))}
-</Swiper>
-
-      {/* Tabs */}
-    
-    </div>
       {/* Popular Section */}
-      <Populargames/>
-      <Originalgame/>
-      {/* <Providers/> */}
-      <Gameshows/>
-      <Strikegames/>
-      <GameTable/>
+      <Cgamesbox/>
+      <GameTable/> 
     </div>
   
    </section>
   )
 }
 
-export default Hero
+export default Chero

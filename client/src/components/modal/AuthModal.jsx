@@ -64,6 +64,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const base_url=import.meta.env.VITE_BASE_URL;
   const [activeTab, setActiveTab] = useState("signin");
   const navigate=useNavigate();
+  
   const [signinData, setSigninData] = useState({
     email: "",
     password: "",
@@ -72,7 +73,6 @@ const AuthModal = ({ isOpen, onClose }) => {
     name: "",
     email: "",
     password: "",
-    phone: "",
     currency:"BDT"
   });
   const [errors, setErrors] = useState({});
@@ -80,7 +80,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     // Clear form fields when tab changes
     if (activeTab === "signin") {
-      setSignupData({ name: "", email: "", password: "", phone: "" });
+      setSignupData({ name: "", email: "", password: ""});
     } else {
       setSigninData({ email: "", password: "" });
     }
@@ -111,7 +111,6 @@ const AuthModal = ({ isOpen, onClose }) => {
     let newErrors = {};
 
     if (!signupData.name.trim()) newErrors.name = "Full Name is required";
-    if (!signupData.phone.trim()) newErrors.phone = "Phone number is required";
 
     if (!signupData.email.trim()) {
       newErrors.email = "Email is required";
@@ -142,7 +141,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     if (!validateSignIn()) return;
 
     axios
-      .post(`http://localhost:8080/auth/login`, signinData)
+      .post(`${base_url}/auth/login`, signinData)
       .then((response) => {
         console.log(response);
         if (!response.data.success) {
@@ -173,7 +172,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     if (!validateSignUp()) return;
       console.log(signupData)
     axios
-      .post(`http://localhost:8080/auth/signup`, signupData)
+      .post(`${base_url}/auth/signup`, signupData)
       .then((response) => {
         if(response){
       toast.success("Success", response.data.message, "success");
@@ -268,19 +267,6 @@ const AuthModal = ({ isOpen, onClose }) => {
               />
             </div>
             {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-      
-            <div className="flex items-center border rounded-md p-3">
-              <FaMobileAlt className="text-gray-500 mr-3" />
-              <input
-                type="number"
-                name="phone"
-                placeholder="Phone Number"
-                className="w-full outline-none text-gray-700"
-                value={signupData.phone}
-                onChange={handleChange}
-              />
-            </div>
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
       
             <div className="flex items-center border rounded-md p-3">
               <FaEnvelope className="text-gray-500 mr-3" />

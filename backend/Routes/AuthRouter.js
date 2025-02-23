@@ -35,7 +35,7 @@ const generateReferralCode = (length = 8) => {
 
 router.post('/signup', async (req, res) => {
     try {
-        const { name, phone, email, password, currency, verificationCode, referralCode } = req.body;
+        const { name, email, password, currency, verificationCode, referralCode } = req.body;
         console.log(req.body);
 
         const user = await UserModel.findOne({ email });
@@ -50,7 +50,6 @@ router.post('/signup', async (req, res) => {
         const userModel = new UserModel({
             name,
             email,
-            phone,
             password,
             currency,
             player_id,
