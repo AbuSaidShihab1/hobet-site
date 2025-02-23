@@ -14,7 +14,7 @@ import { IoPlayOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import Populargames from '../components/home/Populargames';
 import Originalgame from '../components/home/Originalgame';
-import GamePopup from '../components/modal/Gamepopup';
+import GamePopup from '../components/modal/GamePopup';
 import SpinGamePopup from '../components/modal/SpinGamePopup';
 import { Header } from 'rsuite';
 const Games = () => {
