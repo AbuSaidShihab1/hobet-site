@@ -8,6 +8,7 @@ import { FaBars, FaTimes, FaUser, FaHeart, FaGift, FaCrown, FaTh, FaBolt, FaTrop
 import Header from "../../components/Header";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
+import axios from "axios";
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("my-account");
  const [wifiSpeed, setWifiSpeed] = useState(null);
@@ -15,6 +16,8 @@ const Profile = () => {
  const [dropdownOpen, setDropdownOpen] = useState(false);
  const [calendarOpen, setCalendarOpen] = useState(false);
  const [selectedDates, setSelectedDates] = useState([]);
+ const base_url="https://hobet-site.onrender.com";
+
   const transactions = [
     {
       id: "2486605011",
@@ -98,6 +101,20 @@ const Profile = () => {
     status: "yellow",
   },
 ];
+const user = {
+  name: "Shihab",
+  email: "shihabmoni77@gmail.com",
+  phone: "016844941043",
+  pin: "4223",
+  currency: "BDT",
+  role: "user",
+  balance: 0,
+  deposit: 0,
+  withdraw: 0,
+  invest: 0,
+  accountId: "394868435",
+  birthday: "1970.01.01",
+};
 const [filter, setFilter] = useState("");
 
 const filteredTransactions = transactionsData.filter((transaction) =>
@@ -132,6 +149,22 @@ const filteredTransactions = transactionsData.filter((transaction) =>
         return () => connection.removeEventListener("change", updateSpeed);
       }
     }, []);
+  const user_info=JSON.parse(localStorage.getItem("user"))
+  const [user_details,set_userdetails]=useState([])
+  const user_data=()=>{
+    axios.get(`${base_url}/auth/user/${user_info?._id}`)
+    .then((res)=>{
+      console.log(res)
+      if(res.data.success){
+        set_userdetails(res.data.user)
+      }
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }   
+  useEffect(()=>{
+    user_data();
+  },[])
   return (
    <section className='w-full h-full bg-dark_theme flex justify-center font-bai overflow-hidden'>
     <Sidebar/>
@@ -163,50 +196,63 @@ const filteredTransactions = transactionsData.filter((transaction) =>
 
       {/* Account Section */}
       {activeTab === "my-account" && (
-        <div className="mt-6 bg-gray-800 p-6 rounded-lg">
-          {/* VIP Progress */}
-          <div className="mb-4">
-            <h3 className="font-semibold">Your VIP Progress</h3>
-            <div className="relative w-full bg-gray-700 h-2 rounded-full mt-2">
-              <div className="w-0 bg-yellow-500 h-2 rounded-full"></div>
-            </div>
-            <div className="flex justify-between mt-1 text-sm text-gray-400">
-              <span className="flex items-center gap-2">
-                <RiVipCrownFill className="text-green-500" /> Beginner
-              </span>
-              <span className="flex items-center gap-1">Bronze</span>
-            </div>
-          </div>
+ <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg text-white">
+ {/* VIP Progress */}
+ <div className="mb-6">
+   <h3 className="font-semibold text-lg">Your VIP Progress</h3>
+   <div className="relative w-full bg-gray-700 h-2 rounded-full mt-2">
+     <div className="w-1/4 bg-yellow-500 h-2 rounded-full"></div>
+   </div>
+   <div className="flex justify-between mt-1 text-sm text-gray-400">
+     <span className="flex items-center gap-2">
+       <RiVipCrownFill className="text-green-500" /> Beginner
+     </span>
+     <span className="flex items-center gap-1">Bronze</span>
+   </div>
+ </div>
 
-          {/* Profile Info */}
-          <div className="flex items-center space-x-4">
-            <div className="w-20 h-20 bg-bg4 rounded-full flex justify-center items-center text-[35px]">
-              <FaUser/>
-            </div>
-            <span className="text-xl font-semibold">394868435</span>
-          </div>
+ {/* Profile Info */}
+ <div className="flex items-center space-x-4 p-4 bg-gray-900 rounded-lg">
+   <div className="w-20 h-20 bg-gray-700 rounded-full flex justify-center items-center text-[35px]">
+     <FaUser />
+   </div>
+   <span className="text-xl font-semibold">{user.accountId}</span>
+ </div>
 
-          {/* Account Details */}
-          <div className="mt-6 grid grid-cols-4 gap-4 text-sm">
-            {["Name", "Surname", "Account ID", "Currency", "Birthday", "Email", "Phone number", "Password"].map((field, index) => (
-              <div key={index} className="bg-gray-800 p-2 py-[12px] border-[2px] border-gray-700 rounded flex justify-between">
-                <span>{field}</span>
-                <input
-                  type={field === "Password" ? "password" : "text"}
-                  className="bg-transparent text-white border-none outline-none"
-                  value={field === "Account ID" ? "394868435" : field === "Currency" ? "৳" : field === "Email" ? "abusaidshihabmoni@gmail.com" : field === "Birthday" ? "1970.01.01" : field === "Password" ? "••••••••" : "-"}
-                  readOnly
-                />
-                {field !== "Email" && field !== "Phone number" && <FaLock className="text-gray-400" />}
-              </div>
-            ))}
-          </div>
+ {/* Account Details */}
+ <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+   {[
+     { label: "Name", value: user_details.name },
+     { label: "Account ID", value: user_details._id },
+     { label: "Currency", value: "৳" },
+     { label: "Email", value: user_details.email },
+     { label: "Balance", value: `৳ ${user_details.balance}` },
+     { label: "PIN", value: "••••••••" },
+     { label: "Password", value: "••••••••" },
+   ].map((field, index) => (
+     <div
+       key={index}
+       className="bg-gray-900 p-3 border border-gray-700 rounded flex justify-between items-center"
+     >
+       <span>{field.label}</span>
+       <input
+         type={field.label === "Password" || field.label === "PIN" ? "password" : "text"}
+         className="bg-transparent text-white border-none outline-none text-right"
+         value={field.value}
+         readOnly
+       />
+       {field.label !== "Email" && field.label !== "Phone number" && (
+         <FaLock className="text-gray-400" />
+       )}
+     </div>
+   ))}
+ </div>
 
-          {/* Logout Button */}
-          <button className="mt-6 w-full bg-red-600 hover:bg-red-700 p-2 rounded flex items-center justify-center gap-2">
-            <AiOutlineLogout /> Log out
-          </button>
-        </div>
+ {/* Logout Button */}
+ <button className="mt-6 w-full bg-red-600 hover:bg-red-700 p-3 rounded flex items-center justify-center gap-2 text-lg font-semibold">
+   <AiOutlineLogout /> Log out
+ </button>
+</div>
       )}
       {activeTab=="transactions" && (
         <div>

@@ -20,6 +20,7 @@ app.use(cors(
         origin:[
             "http://localhost:5173",
             "http://localhost:5174",
+            "https://hooobet.onrender.com",
             "*",
           ], // Specify the allowed origin
         methods: ["GET", "POST", "PUT", "DELETE","PATCH","OPTIONS"], // Specify allowed methods
