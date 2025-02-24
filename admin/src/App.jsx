@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation,Navigate } from "react-router-dom";
 import Sidebar from "./components/common/Sidebar";
 import OverviewPage from "./pages/OverviewPage";
 import ProductsPage from "./pages/ProductsPage";
@@ -27,7 +27,7 @@ import RobotsTxtForm from "./components/system/RobotsTxtForm";
 function App() {
 	const location = useLocation();
 	const hideSidebar = location.pathname === "/hobet-admin-login";
-
+	const isAdminAuthenticated = localStorage.getItem("admin");
 	return (
 		<div className='flex h-screen  text-gray-100 overflow-hidden'>
 			{/* BG */}
@@ -39,35 +39,35 @@ function App() {
 			{!hideSidebar && <Sidebar />}
 
 			<Routes>
-				<Route path='/' element={<OverviewPage />} />
-				<Route path='/products' element={<ProductsPage />} />
-				<Route path='/users' element={<UsersPage />} />
-				<Route path='/sales' element={<SalesPage />} />
-				<Route path='/orders' element={<OrdersPage />} />
-				<Route path='/analytics' element={<AnalyticsPage />} />
-				{/* <Route path='/settings' element={<SettingsPage />} /> */}
-				<Route path='/games' element={<GamesTable />} />
-				<Route path='/games/game-log' element={<Gamelogs />} />
-				{/* -------------------user------------------------ */}
-				<Route path='/users/active-user' element={<Activeuser />} />
-				{/* ---------------deposit----------------------*/}
-				<Route path='/deposits/pending-deposit' element={<Pendingdeposit />} />
-				{/* ---------------withdraw---------------------- */}
-				<Route path='/withdrawals/pending-withdrawal' element={<Pendingwithdraw />} />
-				{/* ---------------support---------------------- */}
-				<Route path='/supports/pending-support' element={<Pendingticket />} />
-				<Route path='/reports/transaction-history' element={<TransactionLogs />} />
-				<Route path='/settings' element={<Setting />} />
-				{/* --------------------request and reports---------------------- */}
-				<Route path='/request-reports' element={<Reportsandrequest/>} />
-				<Route path='/settings/general-settings' element={<Generalsettings/>} />
-				<Route path='/settings/logo-icon' element={<LogoFaviconUploader/>} />
-				<Route path='/settings/system-config' element={<Configuration/>} />
-				<Route path='/settings/seo-config' element={<SEOConfig/>} />
-				<Route path='/settings/notification' element={<NotificationTemplates/>} />
-				<Route path='/settings/robot-text' element={<RobotsTxtForm/>} />
-				<Route path='/hobet-admin-login' element={<AdminLogin/>} />
-			</Routes>
+      {!isAdminAuthenticated ? (
+        <Route path="*" element={<Navigate to="/hobet-admin-login" replace />} />
+      ) : (
+        <>
+          <Route path="/" element={<OverviewPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/games" element={<GamesTable />} />
+          <Route path="/games/game-log" element={<Gamelogs />} />
+          <Route path="/users/active-user" element={<Activeuser />} />
+          <Route path="/deposits/pending-deposit" element={<Pendingdeposit />} />
+          <Route path="/withdrawals/pending-withdrawal" element={<Pendingwithdraw />} />
+          <Route path="/supports/pending-support" element={<Pendingticket />} />
+          <Route path="/reports/transaction-history" element={<TransactionLogs />} />
+          <Route path="/settings" element={<Setting />} />
+          <Route path="/request-reports" element={<Reportsandrequest />} />
+          <Route path="/settings/general-settings" element={<Generalsettings />} />
+          <Route path="/settings/logo-icon" element={<LogoFaviconUploader />} />
+          <Route path="/settings/system-config" element={<Configuration />} />
+          <Route path="/settings/seo-config" element={<SEOConfig />} />
+          <Route path="/settings/notification" element={<NotificationTemplates />} />
+          <Route path="/settings/robot-text" element={<RobotsTxtForm />} />
+          <Route path="/hobet-admin-login" element={<AdminLogin />} />
+        </>
+      )}
+    </Routes>
 		</div>
 	);
 }

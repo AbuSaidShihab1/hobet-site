@@ -10,6 +10,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { nanoid } from "nanoid";
 import { GiFireBowl } from "react-icons/gi";
 import { CgCardSpades } from "react-icons/cg";
+import { FaSearch, FaFire,FaDice,FaAward ,FaSmile } from "react-icons/fa";
 import axios from "axios";
 import { RiCouponLine } from "react-icons/ri";
 import Swal from "sweetalert2";
@@ -20,7 +21,25 @@ import Confetti from "react-confetti";
 import { useWindowSize } from "react-use"; // To get screen size for confetti
 import Logo from "./Logo";
 import { ca } from "date-fns/locale";
+import {FaGamepad } from "react-icons/fa";
+import { MdCasino, MdNewReleases } from "react-icons/md";
+import { IoIosFlash } from "react-icons/io";
 
+const categories = [
+  { name: "1win Games", count: 22, icon: <FaGamepad className="text-blue-400" /> },
+  { name: "Jili Games", count: 163, icon: <FaGamepad className="text-blue-400" /> },
+  { name: "Fishing Games", count: 48, icon: <FaDice className="text-blue-400" /> },
+  { name: "Quick Games", count: 631, icon: <IoIosFlash className="text-purple-500" /> },
+  { name: "Live Casino", count: 776, icon: <MdCasino className="text-red-500" /> },
+  { name: "Drops & Wins", count: 70, icon: <FaTrophy className="text-orange-500" /> },
+  { name: "PGSoft", count: 41, icon: <FaAward className="text-pink-500" /> },
+  { name: "New", count: 434, icon: <MdNewReleases className="text-blue-400" /> },
+  { name: "Slots", count: 11756, icon: <FaDice className="text-orange-500" /> },
+  { name: "Only on 1win", count: 38, icon: <FaFire className="text-blue-400" /> },
+  { name: "Top Games", count: 354, icon: <FaTrophy className="text-orange-500" /> },
+  { name: "Spinoleague", count: 436, icon: <FaAward className="text-blue-400" /> },
+  { name: "Bonus Buy", count: 2856, icon: <FaGift className="text-pink-500" /> },
+];
 const providers = [
   { name: "AmigoGaming", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amigogaming.svg" },
   { name: "Amusnet", logo: "https://diswdgcu9cfva.cloudfront.net/providers_logo/mini/amusnet.svg" },
@@ -224,11 +243,6 @@ const Sidebar = () => {
       const {data} = await axios.post(`${base_url2}/api/payment/bkash`,{mid:"merchant1",payerId:user_details.player_id,amount:transactionAmount,currency:"BDT",redirectUrl:"https://www.babu88.com",orderId:orderId,callbackUrl:"https://admin.eassypay.com/bkash_api"});
       window.location.href = data.link;
       if (data.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Deposit Successful",
-          text: `You have successfully deposited ${amount} ${currency} via BKash.`,
-        });
         console.log("Deposit Success:", data.data);
       } else{
         Swal.fire({
@@ -354,7 +368,7 @@ const Sidebar = () => {
      setTransactionAmount("")
     }
   return (
-   <section className="font-bai w-[20%] xl:block hidden h-screen bg-gray-900 pb-[20px] overflow-y-auto no-scrollbar z-[10000] sticky top-0">
+   <section className="font-bai w-[18%] xl:block hidden h-screen bg-gray-900 pb-[20px] overflow-y-auto no-scrollbar z-[10000] sticky top-0">
     {/* ----------------------sidebar------------------------- */}
          <section className="w-full">
 
@@ -382,276 +396,57 @@ const Sidebar = () => {
       </div> */}
 
           {/* ---------------------deposit-button------------------------ */}
-          <div className="flex flex-col items-center mb-[15px] mt-[25px]">
-            {
-              user_info ?   <button
-              onClick={() => setPopupOpen(true)}
-              className="w-full bg-gradient-to-r from-blue-500 via-pink-500 to-orange-500 text-white py-3 rounded-md font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
-            >
-              Deposit
-            </button>
-            :   <button
-        onClick={()=>{setModalOpen(true)}}
-         className="w-full bg-gradient-to-r from-blue-500 via-pink-500 to-orange-500 text-white py-3 rounded-md font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
-      >
-        Deposit
-      </button>
-            }
-      {popupOpen && (
-        <div className="fixed inset-0 flex items-center z-[100000000000000] justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-900 text-white p-6 rounded-lg w-96 shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Wallet</h2>
-              <button onClick={handleclosepopup} className="text-white text-xl">✕</button>
-            </div>
-            {!selectedMethod ? (
-              <>
-                <div className="flex bg-gray-800 p-1 rounded-lg mb-4">
-                  <button className={`flex-1 py-2 rounded-lg ${selectedTab === "deposit" ? "bg-yellow-500 text-black font-bold" : "text-white"}`} onClick={() => setSelectedTab("deposit")}>Deposit</button>
-                  <button className={`flex-1 py-2 rounded-lg ${selectedTab === "withdraw" ? "bg-yellow-500 text-black font-bold" : "text-white"}`} onClick={() => setSelectedTab("withdraw")}>Withdraw</button>
-                </div>
-                <motion.div
-                  key={selectedTab}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="grid grid-cols-3 gap-4"
-                >
-                  {paymentMethods[selectedTab].map((method, index) => (
-                    <div 
-                      key={index} 
-                      className="bg-gray-800 p-3 rounded-lg flex flex-col items-center justify-center border border-gray-700 cursor-pointer"
-                      onClick={() => setSelectedMethod(method)}
-                    >
-                      <img src={method.src} alt={method.name} className="w-12 h-12 mb-2" />
-                      <span className="text-xs text-white font-medium text-center">{method.name}</span>
-                    </div>
-                  ))}
-                </motion.div>
-              </>
-            ) : (
-             <div>
-                {paymentSuccess && <Confetti width={width} height={height} />}
-                {
-                  selectedTab=="deposit" ? <>
-                 <form onSubmit={handle_bkash_deposit}>
-                <h3 className="text-center text-lg font-semibold mb-2">{selectedMethod.name}</h3>
-     
-                <label className="text-sm mt-4 block">Amount (400৳ - 20000৳)</label>
-                <input
-                  type="number"
-                  className="w-full p-2 mt-1 rounded bg-gray-800 border border-gray-700 text-white"
-                  value={transactionAmount}
-                  onChange={(e) => setTransactionAmount(e.target.value)}
-                  placeholder="Enter amount or select below"
-                />
-          
-                <div className="flex space-x-2 mt-2">
-                  {presetAmounts.map((value) => (
-                    <button
-                      key={value}
-                      className={`flex-1 py-2 text-[14px] rounded-lg font-bold ${
-                        transactionAmount == value
-                          ? "bg-yellow-500 text-black"
-                          : "bg-gray-700 text-white"
-                      }`}
-                      onClick={() => handlePresetAmount(value)}
-                    >
-                      ৳ {value}
-                    </button>
-                  ))}
-                </div>
-          
-                {/* Submit Button */}
-                <button
-                  disabled={loading}
-                  className="w-full mt-4 py-2 rounded-lg font-bold text-white bg-yellow-400 hover:bg-yellow-500 transition duration-300"
-                >
-                  {loading ? (
-                    <div className="flex justify-center items-center">
-                      <svg
-                        className="animate-spin h-5 w-5 mr-2 text-white"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8H4z"
-                        ></path>
-                      </svg>
-                      Processing...
-                    </div>
-                  ) : (
-                    "Submit Payment"
-                  )}
-                </button>
-                 </form>
-                  </>: <form onSubmit={handlewithdraw}>
-                <h3 className="text-center text-lg font-semibold mb-2">{selectedMethod.name}</h3>
-                <label className="text-sm mt-4 block">Account Number</label>
-              <div className="flex items-center space-x-2 mb-4 mt-2 ">
-                <input
-                  type="text"
-                  className="w-full p-2  rounded bg-gray-800 border  border-gray-700 text-white"
-                  placeholder="Enter your number"
-                  value={payeer_account}
-                  onChange={(e)=>{setpayeer_account(e.target.value)}}
-                />
-              </div>
-                <label className="text-sm mt-4 block">Amount (300৳ - 20000৳)</label>
-                <input
-                  type="number"
-                  className="w-full p-2 mt-1 rounded bg-gray-800 border border-gray-700 text-white"
-                  value={transactionAmount}
-                  onChange={(e) => setTransactionAmount(e.target.value)}
-                  placeholder="Enter amount or select below"
-                />
-          
-                <div className="flex space-x-2 mt-2">
-                  {presetAmounts.map((value) => (
-                    <div
-                      key={value}
-                      className={`flex-1 py-2 text-center cursor-pointer text-[14px] rounded-lg font-bold ${
-                        transactionAmount == value
-                          ? "bg-yellow-500 text-black"
-                          : "bg-gray-700 text-white"
-                      }`}
-                      onClick={() => handlePresetAmount(value)}
-                    >
-                      ৳ {value}
-                    </div>
-                  ))}
-                </div>
-          
-                {/* Submit Button */}
-                <button
-                  disabled={loading}
-                  className="w-full mt-4 py-2 rounded-lg font-bold text-white bg-yellow-400 hover:bg-yellow-500 transition duration-300"
-                >
-                  {loading ? (
-                    <div className="flex justify-center items-center">
-                      <svg
-                        className="animate-spin h-5 w-5 mr-2 text-white"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8H4z"
-                        ></path>
-                      </svg>
-                      Processing...
-                    </div>
-                  ) : (
-                    "Submit Payment"
-                  )}
-                </button>
-                  </form>
-                }
-               
-             </div>
-            )}
-            {selectedMethod && (
-              <div className="mt-4 flex justify-start">
-                <button className="bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center" onClick={() => setSelectedMethod(null)}>
-                  <IoIosArrowBack className="text-white" />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-          </div>
-          {successPopupVisible && (
-            <div className="fixed top-0 left-0 w-full h-full z-[1000] flex items-center justify-center bg-gray-500 bg-opacity-50 transition-all duration-300">
-  <div className="bg-gradient-to-r from-green-400 via-green-500 to-green-600 p-8 rounded-lg shadow-2xl text-center max-w-sm w-full">
-    <h3 className="text-white text-2xl font-semibold mb-4">Withdrawal Successful!</h3>
-    <p className="text-white text-lg mb-6">Your withdrawal request has been completed successfully.</p>
-    <button
-      onClick={() => setSuccessPopupVisible(false)}
-      className="bg-white text-green-600 px-6 py-2 rounded-md text-lg font-semibold shadow-md transition-transform transform hover:scale-105 hover:shadow-lg duration-200"
-    >
-      Close
-    </button>
-  </div>
-</div>
-
-)}
-          {/* ---------------------deposit button-------------------- */}
-      <ul className="space-y-2 sidebar_menu">
-        {
-          user_info ?  <li  >
-          <NavLink to="/profile" className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-          <FaUser />
-               <span>My Account</span>
-          </NavLink>
-       
-        </li>: <li onClick={()=>{setModalOpen(true)}} className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaUser />
-    {isOpen && <span>My Account</span>}
-  </li>
-        }
- 
-  <li >
-  <NavLink to="/favourites" className="flex items-center space-x-2 p-2 mb-[10px] bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    
-    <FaHeart />
-    {isOpen && <span>Favorites</span>}
-  </NavLink>
-
-  </li>
-
-<NavLink to="/popular"className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-<GiFireBowl />
-{isOpen && <span>Popular</span>}
-</NavLink>
-<NavLink to="/casino" className="flex items-center space-x-2 p-2 bg-gray-800  border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-   <CgCardSpades />
-    {isOpen && <span>Casino</span>}
-</NavLink>
-<NavLink to="/others"className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-<RiCouponLine />
-{isOpen && <span>Others</span>}
-</NavLink>
-<div className="w-full bg-gray-900 text-white rounded-lg">
-      <div
-        className="flex items-center justify-between p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        <div className="flex items-center space-x-2">
-          <FaTh />
-          <span>Providers</span>
-        </div>
-        {menuOpen ? <FaChevronUp /> : <FaChevronDown />}
+          <div className="w-full bg-gray-900 rounded-lg">
+      {/* Search Bar */}
+      <div className="relative mt-[20px]">
+        <FaSearch className="absolute left-3 top-4 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full pl-10 pr-4 py-3 rounded-md bg-gray-800 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
       </div>
 
-      <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: menuOpen ? "auto" : 0, opacity: menuOpen ? 1 : 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="overflow-hidden"
-      >
-        <ul className="custom-scrollbar mt-2 space-y-2 max-h-[300px] overflow-y-auto">
+      {/* Categories */}
+      <div className="mt-4 w-full mb-[15px]">
+        <h3 className="text-gray-400 text-[16px]">CATEGORIES</h3>
+        <div className="flex gap-1 mt-2">
+          {/* Heated */}
+          <div className="flex w-[50%] items-center gap-2 py-[13px] bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3  rounded-md cursor-pointer hover:opacity-80">
+            <FaFire className="text-xl" />
+            <span className="text-sm">Heated</span>
+            <span className="text-xs bg-black bg-opacity-30 px-2 py-1 rounded-md">21</span>
+          </div>
+
+          {/* Popular */}
+          <div className="flex w-[50%] items-center gap-2 bg-gradient-to-r from-green-700 to-green-500 text-white px-3 py-[13px] rounded-md cursor-pointer hover:opacity-80">
+            <FaSmile className="text-xl" />
+            <span className="text-sm">Popular</span>
+            <span className="text-xs bg-black bg-opacity-30 px-2 py-1 rounded-md">314</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="w-full bg-gray-900  rounded-lg">
+      {categories.map((category, index) => (
+        <div
+          key={index}
+          className="flex justify-between items-center p-3 rounded-md bg-gray-800 hover:bg-gray-700 cursor-pointer transition-all mb-2"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{category.icon}</span>
+            <span className="text-white text-sm font-medium">{category.name}</span>
+          </div>
+          <span className="text-gray-400 text-[14px] font-[500]">{category.count}</span>
+        </div>
+      ))}
+    </div>
+    <div>
+    <div className="py-[10px] flex justify-between items-center">
+    <h3 className="text-gray-400 text-[16px]">Providers</h3>
+    <h3 className="text-blue-400 text-[16px] ">100</h3>
+    </div>
+    <ul className="custom-scrollbar mt-2 space-y-2 ">
           {providers.map((provider, index) => (
             <li key={index} className="flex items-center space-x-2 p-2 bg-gray-800 rounded-md hover:bg-gray-700 cursor-pointer">
               <img src={provider.logo} alt={provider.name} className="w-6 h-6" />
@@ -659,77 +454,8 @@ const Sidebar = () => {
             </li>
           ))}
         </ul>
-      </motion.div>
     </div>
-  <div className="relative">
-      {/* Bonus Button */}
-      <li
-        className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer"
-        onClick={() => setbonuspopup(true)}
-      >
-        <FaBolt />
-        <span>Bonus</span>
-      </li>
-      
-      {/* Popup */}
-      {bonuspopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-900 text-white p-6 rounded-lg w-[30%] relative shadow-lg">
-            <button className="absolute top-3 right-3 text-white" onClick={() => setbonuspopup(false)}>
-              <IoClose size={24} />
-            </button>
-            <h2 className="text-xl font-bold text-center">Bonuses</h2>
-            <div className="mt-4 bg-black p-4 rounded-md shadow-lg shadow-indigo-500/20">
-  <div className="flex justify-between items-center py-[10px]">
-    <p className="text-[17px] text-white">Your VIP Progress</p>
-    <p className="text-sm text-gray-300">5%</p>
-  </div>
-
-  {/* Progress Bar */}
-  <div className="w-full bg-gray-700 h-2 rounded-full mt-1 relative overflow-hidden">
-    <div className="h-2 rounded-full w-[5%] bg-gradient-to-r from-green-400 to-blue-500 animate-pulse"></div>
-  </div>
-
-  <p className="text-[16px] text-gray-400 mt-2">Next level: Bronze</p>
-  <p className="mt-[10px] text-[16px] leading-[25px] text-gray-300">
-    When you reach the next level, you will immediately receive a Next Level Bonus. Also, when you reach a new level, you can contact Customer Support and request a Special Bonus from Support.
-  </p>
-</div>
-
-            <div className="mt-4 p-4 rounded-md bg-gradient-to-br from-blue-500 to-indigo-700 shadow-lg shadow-indigo-500/50">
-  <div className="mb-[10px]">
-    <p className="text-[20px] font-semibold text-left mb-[5px] text-white">Rakeback</p>
-    <p className="text-[16px] text-gray-200">We return up to 5% of casino income to you.</p>
-  </div>
-  <button className="mt-2 px-4 py-2 w-full rounded-md bg-gradient-to-r from-blue-400 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/50 transition-transform transform hover:scale-105 hover:shadow-indigo-500/70">
-    Claim
-  </button>
-</div>
-
-<div className="mt-4 p-4 rounded-xl bg-gray-900 border border-indigo-500 shadow-lg shadow-indigo-500/50 relative overflow-hidden">
-  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-blue-500/10 blur-xl"></div>
-  <div className="relative z-10">
-    <p className="text-[20px] font-semibold text-left mb-[5px] text-white uppercase">Rakeback</p>
-    <p className="text-[16px] text-gray-300">We return up to 5% of casino income to you.</p>
-    <button className="mt-4 px-4 py-2 w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/50 hover:scale-105 transition-transform hover:shadow-indigo-400/70">
-      Claim
-    </button>
-  </div>
-</div>
-
-          </div>
-        </div>
-      )}
-    </div>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaTrophy />
-    {isOpen && <span>Battles</span>}
-  </li>
-  <li className="flex items-center space-x-2 p-2 bg-gray-800 border-2 transition-all duration-300 border-transparent hover:border-bg4 cursor-pointer">
-    <FaMobileAlt />
-    {isOpen && <span>Mobile App</span>}
-  </li>
-</ul>
+ 
 
     <AuthModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
 

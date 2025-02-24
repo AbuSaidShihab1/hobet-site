@@ -20,6 +20,8 @@ import banner1 from "../../assets/banner1.webp"
 import banner2 from "../../assets/banner2.webp"
 import banner3 from "../../assets/banner3.webp"
 import GameTable from './GameTable';
+import Slider from './Slider';
+import RecentBigWins from './RecentBigWins';
 const tabs = [
   { label: "Asia", icon: <FaYinYang /> },
   { label: "Popular", icon: <FaStar /> },
@@ -83,20 +85,20 @@ const Hero = () => {
     setActiveIndex(index);
   };
   return (
-   <section className='w-[100%] xl:w-[80%] xl:px-[20px] no-scrollbar   xl:py-[20px] '>
+   <section className='w-[100%] xl:w-[82%] no-scrollbar   xl:pb-[20px] '>
       <Header/>
       {/* <Loader/> */}
 
         {/* Main Content */}
-        <div className="xl:bg-gray-800 px-[10px] py-[20px] xl:p-[30px] xl:border-[2px] border-gray-700 rounded-lg overflow-hidden text-white">
+        <div className="xl:bg-gray-800 xl:px-[20px]   px-[10px] py-[20px] xl:p-[30px]  overflow-hidden text-white">
       {/* Banner Section */}
-      <div className="relative">
+      <Slider/>
+      {/* <div className="relative">
       <img
         src={banners[activeIndex]}
         alt="Banner"
         className="w-full h-[200px] xl:h-[400px] object-cover rounded-lg transition-opacity duration-500"
       />
-      {/* Slider Navigation */}
       <div className="absolute bottom-[-8%] left-0 right-0 flex justify-center">
         <div className="flex space-x-2">
           {banners.map((_, index) => (
@@ -110,10 +112,11 @@ const Hero = () => {
           ))}
         </div>
       </div>
-    </div>
-      <div className="w-full items-center  py-4 mt-[30px] ">
+    </div> */}
+    <RecentBigWins/>
+      {/* <div className="w-full items-center  py-4 mt-[10px] "> */}
 
-      <Swiper
+      {/* <Swiper
   slidesPerView={3}
   pagination={{
     clickable: true,
@@ -160,11 +163,11 @@ const Hero = () => {
       </button>
     </SwiperSlide>
   ))}
-</Swiper>
+</Swiper> */}
 
       {/* Tabs */}
     
-    </div>
+    {/* </div> */}
       {/* Popular Section */}
       <Populargames/>
       <Originalgame/>

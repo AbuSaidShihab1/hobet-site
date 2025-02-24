@@ -69,7 +69,7 @@ const adminlogin = async (req, res) => {
                 success: true,
                 jwtToken,
                 email,
-                     user: user
+                     admin: user
             })
     } catch (err) {
         console.log(err)

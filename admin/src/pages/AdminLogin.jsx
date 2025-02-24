@@ -17,6 +17,7 @@ export default function AdminLogin() {
     if(res.data.success){
       toast.success("Success", res.data.message, "success");
       localStorage.setItem("admin-token", res.data.jwtToken);
+      localStorage.setItem("admin", JSON.stringify(res.data.admin));
       window.location.href = "/";
     } else {  
       toast.error(res.data.message);          

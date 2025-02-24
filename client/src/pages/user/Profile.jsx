@@ -8,6 +8,7 @@ import { FaBars, FaTimes, FaUser, FaHeart, FaGift, FaCrown, FaTh, FaBolt, FaTrop
 import Header from "../../components/Header";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
+import { FaBell, FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("my-account");
@@ -133,7 +134,15 @@ const filteredTransactions = transactionsData.filter((transaction) =>
    );
  };
 
+ const [activeSection, setActiveSection] = useState("personal-info");
+ const [expandedSections, setExpandedSections] = useState({});
 
+ const toggleSection = (section) => {
+   setExpandedSections((prev) => ({
+     ...prev,
+     [section]: !prev[section],
+   }));
+ };
     useEffect(() => {
       // Check the connection speed using the navigator.connection API
       if (navigator.connection) {
@@ -168,233 +177,105 @@ const filteredTransactions = transactionsData.filter((transaction) =>
   return (
    <section className='w-full h-full bg-dark_theme flex justify-center font-bai overflow-hidden'>
     <Sidebar/>
-    <section className="w-[100%] xl:w-[80%] xl:px-[20px] xl:py-[20px] h-[100vh] overflow-auto">
+    <section className="w-[100%] xl:w-[82%]  xl:pb-[20px] h-[100vh] overflow-auto">
    <Header/>
-   <div className="bg-gray-800 text-white p-[10px] xl:p-6 xl:border-[2px] border-gray-700 xl:rounded-[5px]">
-        {/* Summary Boxes */} 
-      {/* <div className="grid grid-cols-4 gap-4 mb-6">
-        {["Total Withdraw", "Total Deposit", "Total Loss", "Total Win"].map((title, index) => (
-          <div key={index} className="bg-gray-800 p-4 py-[20px] rounded-lg text-center border-[1px] border-gray-700">
-            <h3 className="text-lg font-semibold">{title}</h3>
-            <p className="text-xl font-bold">$0.00</p>
+   <div className="bg-gray-800 text-white xl:px-[20px] mt-[20px] p-[10px] xl:p-6 xl:border-[2px] border-gray-700 xl:rounded-[5px]">
+   <div className="flex  min-h-screen">
+      {/* Sidebar */}
+      <aside className="w-64  shadow-md p-5">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-12 h-12 bg-yellow-500 flex items-center justify-center rounded-full">
+            <FaUser className="text-white text-xl" />
           </div>
-        ))}
-      </div> */}
-
-      {/* Navigation Tabs */}
-      <div className="flex space-x-6 xl:border-b border-gray-700 pb-2">
-        {["My account", "Transactions", "Game history"].map((label, index) => (
-          <button
-            key={index}
-            className={`pb-2 ${activeTab === label.toLowerCase().replace(" ", "-") ? "border-b-2 border-yellow-500" : ""}`}
-            onClick={() => setActiveTab(label.toLowerCase().replace(" ", "-"))}
+          <div>
+            <h3 className="font-bold">{user_details.name}</h3>
+            {/* <span className="text-sm bg-yellow-200 text-yellow-800 px-2 py-1 rounded">{user_details.email}</span> */}
+          </div>
+        </div>
+        <div className="mb-5 p-3 border-[2px] border-gray-700 rounded-[5px]">
+          <p className="text-[18px] font-[600] text-bg5">Real money</p>
+          <p className="font-bold text-white">৳0.00</p>
+        </div>
+        <div className="mb-5 p-3 border-[2px] border-gray-700 rounded-[5px]">
+          <p className="text-sm">Bonus money</p>
+          <p className="font-bold">৳0.00</p>
+        </div>
+        {/* Sidebar Links */}
+        <nav>
+          <h4 className="font-bold mb-2">My account</h4>
+          <button 
+            className={`w-full flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "personal-info" ? "bg-bg5" : "hover:bg-bg4"}`}
+            onClick={() => setActiveSection("personal-info")}
           >
-            {label}
+            Personal info
           </button>
-        ))}
-      </div>
+          <button 
+            className={`w-full mt-[10px] flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "Transactions" ? "bg-bg5" : "hover:bg-bg4"}`}
+            onClick={() => setActiveSection("personal-info")}
+          >
+            Transactions
+          </button>
+          <button 
+            className={`w-full mt-[10px] flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "Game History" ? "bg-bg5" : "hover:bg-bg4"}`}
+            onClick={() => setActiveSection("personal-info")}
+          >
+            Game History
+          </button>
+          <button 
+            className={`w-full mt-[10px] flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "Change Password" ? "bg-bg5" : "hover:bg-bg4"}`}
+            onClick={() => setActiveSection("Change Password")}
+          >
+            Change Password
+          </button>
+        </nav>
+      </aside>
 
-      {/* Account Section */}
-      {activeTab === "my-account" && (
- <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg text-white">
- {/* VIP Progress */}
- <div className="mb-6">
-   <h3 className="font-semibold text-lg">Your VIP Progress</h3>
-   <div className="relative w-full bg-gray-700 h-2 rounded-full mt-2">
-     <div className="w-1/4 bg-yellow-500 h-2 rounded-full"></div>
-   </div>
-   <div className="flex justify-between mt-1 text-sm text-gray-400">
-     <span className="flex items-center gap-2">
-       <RiVipCrownFill className="text-green-500" /> Beginner
-     </span>
-     <span className="flex items-center gap-1">Bronze</span>
-   </div>
- </div>
-
- {/* Profile Info */}
- <div className="flex items-center space-x-4 p-4 bg-gray-900 rounded-lg">
-   <div className="w-20 h-20 bg-gray-700 rounded-full flex justify-center items-center text-[35px]">
-     <FaUser />
-   </div>
-   <span className="text-xl font-semibold">{user.accountId}</span>
- </div>
-
- {/* Account Details */}
- <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-   {[
-     { label: "Name", value: user_details.name },
-     { label: "Account ID", value: user_details._id },
-     { label: "Currency", value: "৳" },
-     { label: "Email", value: user_details.email },
-     { label: "Balance", value: `৳ ${user_details.balance}` },
-     { label: "PIN", value: "••••••••" },
-     { label: "Password", value: "••••••••" },
-   ].map((field, index) => (
-     <div
-       key={index}
-       className="bg-gray-900 p-3 border border-gray-700 rounded flex justify-between items-center"
-     >
-       <span>{field.label}</span>
-       <input
-         type={field.label === "Password" || field.label === "PIN" ? "password" : "text"}
-         className="bg-transparent text-white border-none outline-none text-right"
-         value={field.value}
-         readOnly
-       />
-       {field.label !== "Email" && field.label !== "Phone number" && (
-         <FaLock className="text-gray-400" />
-       )}
-     </div>
-   ))}
- </div>
-
- {/* Logout Button */}
- <button className="mt-6 w-full bg-red-600 hover:bg-red-700 p-3 rounded flex items-center justify-center gap-2 text-lg font-semibold">
-   <AiOutlineLogout /> Log out
- </button>
-</div>
-      )}
-      {activeTab=="transactions" && (
-        <div>
-     <div className="relative w-full text-white flex justify-center items-center gap-[10px] mt-[20px]">
-        {/* Filter Dropdown */}
-        <div className="p-3 w-[50%] border-gray-700 bg-gray-900 border-[2px] rounded flex items-center justify-between cursor-pointer" onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <span>{selectedFilters.length > 0 ? selectedFilters.join(", ") : "Select Filters"}</span>
-          <IoIosArrowDown className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
-        </div>
-        {dropdownOpen && (
-          <div className="absolute top-[100%] left-0 w-[50%]  bg-gray-900 rounded shadow-lg z-10">
-            {filters.map((filterGroup, index) => (
-              <div key={index} className="border-b border-gray-700  last:border-0">
-                <div className="p-2 font-semibold cursor-pointer" onClick={() => toggleFilter(filterGroup.category)}>
-                  {filterGroup.category}
-                </div>
-                {filterGroup.options.length > 0 && (
-                  <div className="pl-4 pb-2">
-                    {filterGroup.options.map((option, i) => (
-                      <div
-                        key={i}
-                        className={`p-2 cursor-pointer ${selectedFilters.includes(option) ? "font-bold" : ""}`}
-                        onClick={() => toggleFilter(option)}
-                      >
-                        {option}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+      {/* Main Content */}
+      <main className="flex-1  p-10 shadow-md">
+        <h2 className="text-2xl font-bold mb-5">Personal info</h2>
+        <form className="grid grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm">Username</label>
+            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue={user_details.name} />
           </div>
-        )}
-  
-        {/* Calendar */}
-        <div className=" w-[50%] border-[2px] border-gray-700 bg-gray-900  p-3 rounded flex items-center justify-between cursor-pointer" onClick={() => setCalendarOpen(true)}>
-          <span>{selectedDates.length > 0 ? selectedDates.join(", ") : "Select Date Range"}</span>
-          <FaCalendarAlt />
-        </div>
-        {calendarOpen && (
-          <div className="absolute top-[100%] right-0 w-[50%] bg-gray-900 p-4 rounded shadow-lg z-20">
-            <h3 className="text-center font-semibold mb-2">February 2025</h3>
-            <div className="grid grid-cols-7 gap-2">
-              {[...Array(28)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`p-3 rounded cursor-pointer ${selectedDates.includes(i + 1) ? "border border-green-500" : ""}`}
-                  onClick={() => toggleDateSelection(i + 1)}
-                >
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-            <button className="w-full bg-green-600 mt-4 p-2 rounded" onClick={() => setCalendarOpen(false)}>Accept</button>
+          <div>
+            <label className="block text-sm">Email</label>
+            <input type="email" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue={user_details.email} />
           </div>
-        )}
-      </div>
-
-<div className="py-4 text-white rounded-xl">
-      <input
-        type="text"
-        placeholder="Search Transactions..."
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-        className="w-full p-2 mb-4 bg-gray-800 rounded-lg text-white border border-gray-600"
-      />
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-gray-700">
-            <th className="p-2">ID</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Time</th>
-            <th className="p-2">Type</th>
-            <th className="p-2">Amount</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map((transaction) => (
-            <tr key={transaction.id} className="border-b border-gray-700">
-              <td className="p-2">{transaction.id}</td>
-              <td className="p-2">{transaction.date}</td>
-              <td className="p-2">{transaction.time}</td>
-              <td className="p-2">{transaction.type}</td>
-              <td className="p-2 text-green-400">{transaction.amount}</td>
-              <td className={`p-2 ${transaction.status === "red" ? "text-red-500" : "text-yellow-500"}`}>
-                ●
-              </td>
-              <td className="p-2">
-                <button className="px-4 py-1 bg-bg5 rounded-[3px]">Details</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <div>
+            <label className="block text-sm">Player ID</label>
+            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue={user_details.player_id} />
+          </div>
+          <div>
+            <label className="block text-sm">Currency</label>
+            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue="BDT" />
+          </div>
+          <div>
+            <label className="block text-sm">Country</label>
+            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue="Bangladesh" />
+          </div>
+          <div>
+            <label className="block text-sm">ID</label>
+            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue={user_details._id} />
+          </div>
+          <div>
+            <label className="block text-sm">Referal Code</label>
+            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px] text-bg5" defaultValue={`https://hobet.com/`+user_details.referralCode}/>
+          </div>
+      
+          {/* <div className="col-span-2 flex items-center gap-3">
+            <input type="checkbox" className="w-5 h-5" />
+            <label>I would like to receive news, promotional material and other information from the casino and its affiliates.</label>
+          </div>
+          <div className="col-span-2">
+            <button className="w-full bg-yellow-500 p-3 text-black font-bold rounded-md">SUBMIT</button>
+          </div> */}
+           <div className="col-span-2">
+            <button className="w-full bg-bg4 p-3 text-white font-bold rounded-md">SUBMIT</button>
+          </div> 
+        </form>
+      </main>
     </div>
-        </div>
-   
-      )}
-      {activeTab=="game-history" && (
-        <div className="pt-[20px] ">
-
-
-
-      <table className="w-full text-left border-collapse">
-        <thead>
-          <tr className="text-gray-400 text-sm">
-            <th className="pb-2">ID</th>
-            <th className="pb-2">Date</th>
-            <th className="pb-2">Time</th>
-            <th className="pb-2">Game</th>
-            <th className="pb-2">Result</th>
-            <th className="pb-2">Status</th>
-            <th className="pb-2">Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {games.map((game) => (
-            <tr key={game.id} className="border-t border-gray-700 text-sm">
-              <td className="py-3">{game.id}</td>
-              <td>{game.date}</td>
-              <td>{game.time}</td>
-              <td>{game.game}</td>
-              <td className={game.status === "win" ? "text-green-500" : "text-red-500"}>{game.result}</td>
-              <td>
-                <span 
-                  className={`inline-block w-2 h-2 rounded-full ${
-                    game.status === "win" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                ></span>
-              </td>
-              <td>
-                <button className="bg-cyan-400 text-gray-900 px-3 py-1 rounded">Details</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    
-      )}
     </div>
     </section>
    </section>
