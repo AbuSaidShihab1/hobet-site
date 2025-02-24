@@ -19,32 +19,6 @@ const Profile = () => {
  const [selectedDates, setSelectedDates] = useState([]);
  const base_url="https://hobet-site.onrender.com";
 
-  const transactions = [
-    {
-      id: "2486605011",
-      date: "11.02.2025",
-      time: "14:03",
-      type: "Deposit",
-      amount: "+600 ৳",
-      status: "red",
-    },
-    {
-      id: "2486594771",
-      date: "11.02.2025",
-      time: "14:01",
-      type: "Deposit",
-      amount: "+600 ৳",
-      status: "red",
-    },
-    {
-      id: "2478061011",
-      date: "10.02.2025",
-      time: "15:10",
-      type: "Deposit",
-      amount: "+600 ৳",
-      status: "yellow",
-    },
-  ];
   const games = [
     {
       id: "3486605011",
@@ -174,6 +148,43 @@ const filteredTransactions = transactionsData.filter((transaction) =>
   useEffect(()=>{
     user_data();
   },[])
+  // ------------------transactions-tab-----------------------------------
+  const transactions = [
+   
+  ];
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Completed":
+        return "text-green-400";
+      case "Pending":
+        return "text-yellow-400";
+      case "Failed":
+        return "text-red-400";
+      default:
+        return "text-gray-400";
+    }
+  };
+  // ------------change-password-----------------
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // Additional validation (e.g., check password strength) can go here
+
+    // If everything is valid, proceed with the password change
+    console.log("Password changed successfully!");
+    setError(""); // Clear any previous errors
+  };
   return (
    <section className='w-full h-full bg-dark_theme flex justify-center font-bai overflow-hidden'>
     <Sidebar/>
@@ -182,16 +193,16 @@ const filteredTransactions = transactionsData.filter((transaction) =>
    <div className="bg-gray-800 text-white xl:px-[20px] mt-[20px] p-[10px] xl:p-6 xl:border-[2px] border-gray-700 xl:rounded-[5px]">
    <div className="flex  min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64  shadow-md p-5">
+      <aside className="w-64 shadow-md p-5">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-12 h-12 bg-yellow-500 flex items-center justify-center rounded-full">
             <FaUser className="text-white text-xl" />
           </div>
           <div>
             <h3 className="font-bold">{user_details.name}</h3>
-            {/* <span className="text-sm bg-yellow-200 text-yellow-800 px-2 py-1 rounded">{user_details.email}</span> */}
           </div>
         </div>
+
         <div className="mb-5 p-3 border-[2px] border-gray-700 rounded-[5px]">
           <p className="text-[18px] font-[600] text-bg5">Real money</p>
           <p className="font-bold text-white">৳0.00</p>
@@ -200,28 +211,29 @@ const filteredTransactions = transactionsData.filter((transaction) =>
           <p className="text-sm">Bonus money</p>
           <p className="font-bold">৳0.00</p>
         </div>
+
         {/* Sidebar Links */}
         <nav>
           <h4 className="font-bold mb-2">My account</h4>
-          <button 
+          <button
             className={`w-full flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "personal-info" ? "bg-bg5" : "hover:bg-bg4"}`}
             onClick={() => setActiveSection("personal-info")}
           >
             Personal info
           </button>
-          <button 
+          <button
             className={`w-full mt-[10px] flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "Transactions" ? "bg-bg5" : "hover:bg-bg4"}`}
-            onClick={() => setActiveSection("personal-info")}
+            onClick={() => setActiveSection("Transactions")}
           >
             Transactions
           </button>
-          <button 
+          <button
             className={`w-full mt-[10px] flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "Game History" ? "bg-bg5" : "hover:bg-bg4"}`}
-            onClick={() => setActiveSection("personal-info")}
+            onClick={() => setActiveSection("Game History")}
           >
             Game History
           </button>
-          <button 
+          <button
             className={`w-full mt-[10px] flex justify-between px-3 py-[10px] rounded-[5px] ${activeSection === "Change Password" ? "bg-bg5" : "hover:bg-bg4"}`}
             onClick={() => setActiveSection("Change Password")}
           >
@@ -231,49 +243,154 @@ const filteredTransactions = transactionsData.filter((transaction) =>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1  p-10 shadow-md">
-        <h2 className="text-2xl font-bold mb-5">Personal info</h2>
-        <form className="grid grid-cols-2 gap-5">
+      <main className="flex-1 p-10 shadow-md">
+        {activeSection === "personal-info" && (
           <div>
-            <label className="block text-sm">Username</label>
-            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue={user_details.name} />
+            <h2 className="text-2xl font-bold mb-5">Personal info</h2>
+            <form className="grid grid-cols-2 gap-5">
+              <div>
+                <label className="block text-sm">Username</label>
+                <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue={user_details.name} />
+              </div>
+              <div>
+                <label className="block text-sm">Email</label>
+                <input type="email" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue={user_details.email} />
+              </div>
+              <div>
+                <label className="block text-sm">Player ID</label>
+                <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue={user_details.player_id} />
+              </div>
+              <div>
+                <label className="block text-sm">Currency</label>
+                <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue="BDT" />
+              </div>
+              <div>
+                <label className="block text-sm">Country</label>
+                <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue="Bangladesh" />
+              </div>
+              <div>
+                <label className="block text-sm">ID</label>
+                <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]" defaultValue={user_details._id} />
+              </div>
+              <div>
+                <label className="block text-sm">Referral Code</label>
+                <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px] text-bg5" defaultValue={`https://hobet.com/` + user_details.referralCode} />
+              </div>
+              <div className="col-span-2">
+                <button className="w-full bg-bg4 p-3 text-white font-bold rounded-md">SUBMIT</button>
+              </div>
+            </form>
           </div>
+        )}
+
+        {activeSection === "Transactions" && (
           <div>
-            <label className="block text-sm">Email</label>
-            <input type="email" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue={user_details.email} />
+            <h2 className="text-2xl font-bold mb-5">Transactions</h2>
+            {/* Add transaction related content here */}
+            <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900  text-white">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse border border-gray-700 shadow-lg rounded-lg">
+          <thead>
+            <tr className="bg-gray-900 text-white">
+              <th className="p-3 border border-gray-700">Type</th>
+              <th className="p-3 border border-gray-700">Payment Method</th>
+              <th className="p-3 border border-gray-700">Amount</th>
+              <th className="p-3 border border-gray-700">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.length > 0 ? (
+              transactions.map((transaction, index) => (
+                <tr
+                  key={transaction.id}
+                  className={
+                    index % 2 === 0
+                      ? "bg-gray-800 hover:bg-gray-700 transition-colors"
+                      : "bg-gray-700 hover:bg-gray-600 transition-colors"
+                  }
+                >
+                  <td className="p-3 border border-gray-700">{transaction.type}</td>
+                  <td className="p-3 border border-gray-700">{transaction.paymentMethod}</td>
+                  <td className="p-3 border border-gray-700">{transaction.amount}</td>
+                  <td className={`p-3 border border-gray-700 font-bold ${getStatusColor(transaction.status)}`}>{transaction.status}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center p-5">
+                  <div className="flex flex-col items-center">
+                    <img src="https://bc.game/assets/common/empty.png" alt="No Data" className="w-32 h-32 mb-2" />
+                    <p className="text-gray-400">Oops! There is no data yet!</p>
+                  </div>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
           </div>
+        )}
+
+        {activeSection === "Game History" && (
           <div>
-            <label className="block text-sm">Player ID</label>
-            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue={user_details.player_id} />
+            <h2 className="text-2xl font-bold mb-5">Game History</h2>
+            {/* Add game history related content here */}
           </div>
+        )}
+
+        {activeSection === "Change Password" && (
           <div>
-            <label className="block text-sm">Currency</label>
-            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue="BDT" />
+            <h2 className="text-2xl font-bold mb-5">Change Password</h2>
+            {/* Add change password related content here */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="current-password" className="block text-sm font-medium text-gray-300">Current Password</label>
+          <input
+            type="password"
+            id="current-password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            required
+           className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="new-password" className="block text-sm font-medium text-gray-300">New Password</label>
+          <input
+            type="password"
+            id="new-password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+            className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-300">Confirm New Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+           className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"
+          />
+        </div>
+
+        {error && <p className="text-red-400 text-sm">{error}</p>}
+
+        <button
+          type="submit"
+          className="w-full px-4 py-2 mt-4 bg-bg4 text-white rounded-[4px]"
+        >
+          Change Password
+        </button>
+      </form>
           </div>
-          <div>
-            <label className="block text-sm">Country</label>
-            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue="Bangladesh" />
-          </div>
-          <div>
-            <label className="block text-sm">ID</label>
-            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px]"  defaultValue={user_details._id} />
-          </div>
-          <div>
-            <label className="block text-sm">Referal Code</label>
-            <input type="text" className="w-full p-2 bg-gray-800 border-[2px] border-gray-700 mt-[5px] rounded-[4px] text-bg5" defaultValue={`https://hobet.com/`+user_details.referralCode}/>
-          </div>
-      
-          {/* <div className="col-span-2 flex items-center gap-3">
-            <input type="checkbox" className="w-5 h-5" />
-            <label>I would like to receive news, promotional material and other information from the casino and its affiliates.</label>
-          </div>
-          <div className="col-span-2">
-            <button className="w-full bg-yellow-500 p-3 text-black font-bold rounded-md">SUBMIT</button>
-          </div> */}
-           <div className="col-span-2">
-            <button className="w-full bg-bg4 p-3 text-white font-bold rounded-md">SUBMIT</button>
-          </div> 
-        </form>
+        )}
       </main>
     </div>
     </div>
