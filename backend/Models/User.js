@@ -57,7 +57,16 @@ const UserSchema = new Schema({
    },
    referralCode:{
     type:String,
-   }
+   },
+   transactions:{
+    type:Number,
+    default:0
+   },
+   status: {
+    type: String,
+    enum: ['active', 'banned', 'deactivated'],
+    default: 'active',  // default to 'active'
+}
 },{timestamps:true});
 
 const UserModel = mongoose.model('users', UserSchema);

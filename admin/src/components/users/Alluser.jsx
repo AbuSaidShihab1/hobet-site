@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import axios from "axios"
 import moment from "moment"; // ✅ Import Moment.js
 
-const Activeuser = () => {
+const Alluser = () => {
   function StatusSwitch({ status, onChange }) {
     const [isActive, setIsActive] = useState(status === "active");
   
@@ -44,7 +44,7 @@ const Activeuser = () => {
 
       const [active_users,set_activeusers]=useState([]);
       const active_user_info=()=>{
-          axios.get(`http://localhost:8080/admin/active-users`)
+          axios.get(`http://localhost:8080/admin/all-users`)
           .then((res)=>{
             set_activeusers(res.data.data)
           }).catch((err)=>{
@@ -65,7 +65,7 @@ const Activeuser = () => {
             <div className="p-6">
               <div className="w-full  p-4">
                 <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-semibold text-gray-800 mb-6">Active Users</h1>
+                <h1 className="text-2xl font-semibold text-gray-800 mb-6">Banned Users</h1>
 
                   <div className="relative w-[30%]">
                     <input
@@ -119,7 +119,7 @@ const Activeuser = () => {
                       onChange={(newStatus) => handleStatusChange(data, newStatus)}
                     />
                 </td>
-                <NavLink to={`/users/user-detail/${user._id}`}>
+                <NavLink to={`/users/banned-user-detail/${user._id}`}>
                 <button className="flex items-center border-[1px] border-blue-500 px-[10px] py-[4px] rounded-[5px] text-blue-500 hover:text-blue-600">
                   <RiComputerLine className="mr-1" /> Details
                 </button>
@@ -162,4 +162,4 @@ const Activeuser = () => {
   );
 };
 
-export default Activeuser;
+export default Alluser;

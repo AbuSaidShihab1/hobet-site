@@ -9,6 +9,8 @@ import Header from "../../components/Header";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaBell, FaChevronDown } from "react-icons/fa";
+import moment from "moment"; // ✅ Import Moment.js
+
 import axios from "axios";
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("my-account");
@@ -17,7 +19,8 @@ const Profile = () => {
  const [dropdownOpen, setDropdownOpen] = useState(false);
  const [calendarOpen, setCalendarOpen] = useState(false);
  const [selectedDates, setSelectedDates] = useState([]);
- const base_url="https://hobet-site.onrender.com";
+//  const base_url="https://hobet-site.onrender.com";
+const base_url="http://localhost:8080";
 
   const games = [
     {
@@ -149,16 +152,30 @@ const filteredTransactions = transactionsData.filter((transaction) =>
     user_data();
   },[])
   // ------------------transactions-tab-----------------------------------
-  const transactions = [
-   
-  ];
+
+  const [transaction_info,set_transaction_info]=useState([]);
+  const transaction_history=()=>{
+      axios.get(`${base_url}/user/single-user-transactions/${user_info._id}`)
+      .then((res)=>{
+        console.log(res)
+          if(res.data.success){
+            console.log(res.data.data)
+            set_transaction_info(res.data.data)
+          }
+      }).catch((err)=>{
+          console.log(err.name)
+      })
+  };
+  useEffect(()=>{
+    transaction_history()
+  },[])
   const getStatusColor = (status) => {
     switch (status) {
-      case "Completed":
+      case "completed":
         return "text-green-400";
-      case "Pending":
+      case "pending":
         return "text-yellow-400";
-      case "Failed":
+      case "failed":
         return "text-red-400";
       default:
         return "text-gray-400";
@@ -295,23 +312,28 @@ const filteredTransactions = transactionsData.filter((transaction) =>
               <th className="p-3 border border-gray-700">Type</th>
               <th className="p-3 border border-gray-700">Payment Method</th>
               <th className="p-3 border border-gray-700">Amount</th>
+              <th className="p-3 border border-gray-700">Date</th>
               <th className="p-3 border border-gray-700">Status</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.length > 0 ? (
-              transactions.map((transaction, index) => (
+            {transaction_info.length > 0 ? (
+              transaction_info.map((transaction, index) => (
                 <tr
-                  key={transaction.id}
+                  key={transaction._id}
                   className={
                     index % 2 === 0
                       ? "bg-gray-800 hover:bg-gray-700 transition-colors"
                       : "bg-gray-700 hover:bg-gray-600 transition-colors"
                   }
                 >
-                  <td className="p-3 border border-gray-700">{transaction.type}</td>
-                  <td className="p-3 border border-gray-700">{transaction.paymentMethod}</td>
+                  {transaction.payment_type=="Deposit" ?      <td className="p-3 border text-green-500 border-gray-700">{transaction.payment_type}</td>:<td className="p-3 border text-orange-500 border-gray-700">{transaction.payment_type}</td>}
+             
+                  <td className="p-3 border border-gray-700">{transaction.payment_method}</td>
                   <td className="p-3 border border-gray-700">{transaction.amount}</td>
+                  <td className="p-3 border border-gray-700">
+  {moment(transaction.createdAt).fromNow()}
+</td>
                   <td className={`p-3 border border-gray-700 font-bold ${getStatusColor(transaction.status)}`}>{transaction.status}</td>
                 </tr>
               ))

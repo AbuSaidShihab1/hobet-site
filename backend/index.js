@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const AuthRouter = require('./Routes/AuthRouter');
 const user_route = require('./Routes/Userroute');
+const admin_route = require('./Routes/Adminroute');
 
 require('dotenv').config();
 require('./Models/db');
@@ -32,6 +33,7 @@ app.use(cors(
 app.use(express.static("public"))
 app.use('/auth', AuthRouter);
 app.use("/user",user_route);
+app.use("/admin",admin_route);
 app.get("/",(req,res)=>{
     res.send("hello HoBet backend part!")
 })

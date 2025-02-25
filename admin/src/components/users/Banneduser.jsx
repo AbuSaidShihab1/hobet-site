@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import axios from "axios"
 import moment from "moment"; // ✅ Import Moment.js
 
-const Activeuser = () => {
+const Banneduser = () => {
   function StatusSwitch({ status, onChange }) {
     const [isActive, setIsActive] = useState(status === "active");
   
@@ -44,7 +44,7 @@ const Activeuser = () => {
 
       const [active_users,set_activeusers]=useState([]);
       const active_user_info=()=>{
-          axios.get(`http://localhost:8080/admin/active-users`)
+          axios.get(`http://localhost:8080/admin/banned-users`)
           .then((res)=>{
             set_activeusers(res.data.data)
           }).catch((err)=>{
@@ -65,7 +65,7 @@ const Activeuser = () => {
             <div className="p-6">
               <div className="w-full  p-4">
                 <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-semibold text-gray-800 mb-6">Active Users</h1>
+                <h1 className="text-2xl font-semibold text-gray-800 mb-6">Banned Users</h1>
 
                   <div className="relative w-[30%]">
                     <input
@@ -84,7 +84,7 @@ const Activeuser = () => {
           <tr className="bg-[#4634FF] text-white">
             <th className="py-3 px-4 text-left">User</th>
             <th className="py-3 px-4 text-left">Email-Mobile</th>
-            <th className="py-3 px-4 text-left">Country</th>
+            <th className="py-3 px-4 text-left">Reason</th>
             <th className="py-3 px-4 text-left">Joined At</th>
             <th className="py-3 px-4 text-left">Balance</th>
             <th className="py-3 px-4 text-left">Status</th>
@@ -104,7 +104,7 @@ const Activeuser = () => {
                 <br />
                 <span className="text-gray-600">{user.mobile}</span>
               </td>
-              <td className="py-3 px-4 text-gray-800 font-[600]">Bangladesh</td>
+              <td className="py-3 px-4 text-red-500 font-[600]">Problem Detected</td>
               <td className="py-3 px-4 text-gray-800">
                 <span className='font-[600] text-[14px]'>{moment(user?.createdAt).format("MMMM Do YYYY, h:mm A")}</span>
                 <br />
@@ -119,7 +119,7 @@ const Activeuser = () => {
                       onChange={(newStatus) => handleStatusChange(data, newStatus)}
                     />
                 </td>
-                <NavLink to={`/users/user-detail/${user._id}`}>
+                <NavLink to={`/users/banned-user-detail/${user._id}`}>
                 <button className="flex items-center border-[1px] border-blue-500 px-[10px] py-[4px] rounded-[5px] text-blue-500 hover:text-blue-600">
                   <RiComputerLine className="mr-1" /> Details
                 </button>
@@ -162,4 +162,4 @@ const Activeuser = () => {
   );
 };
 
-export default Activeuser;
+export default Banneduser;

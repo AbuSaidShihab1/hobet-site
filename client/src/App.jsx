@@ -9,6 +9,7 @@ import Casino from './pages/games/Casino'
 import Others from './pages/games/Others'
 import Profile from './pages/user/Profile'
 import Gamespage from './pages/Gamespage'
+import PaymentCallbackPage from './components/payment/PaymentCallbackPage'
 const App = () => {
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ const App = () => {
         <Route exact path="/casino" element={<Casino/>}/>  
         <Route exact path="/others" element={<Others/>}/>  
         <Route exact path="/favourites" element={<Favourites/>}/> 
+        <Route exact path="/callback-payment" element={<PaymentCallbackPage/>}/> 
 
 
       </Routes> 

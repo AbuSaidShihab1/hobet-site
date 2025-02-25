@@ -48,7 +48,9 @@ const Header = () => {
   const [wifiSpeed, setWifiSpeed] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const base_url = "https://hobet-site.onrender.com";
+  // const base_url = "https://hobet-site.onrender.com";
+  const base_url = "http://localhost:8080";
+
   const [isSidebarOpen, dispatch] = useReducer(sidebarReducer, false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -114,7 +116,7 @@ const Header = () => {
   const [paymnet_id,set_paymentid]=useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const { width, height } = useWindowSize(); // Get window size for confetti
-  const base_url2="https://api.eassypay.com";
+  const base_url2="http://localhost:6001";
   const merchant_name="hobet"
 
   useEffect(() => {
@@ -242,6 +244,8 @@ const Header = () => {
 
     setLoading(false);
   };
+  const [selectedMethod, setSelectedMethod] = useState(null);
+
   const handle_bkash_deposit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -271,14 +275,16 @@ const Header = () => {
       setProgress(0);
       return;
     }
-
+    console.log(selectedMethod)
+      if(selectedMethod.name==="Bkash"){
     // If all validations pass
     try {
-      const {data} = await axios.post(`${base_url2}/api/payment/bkash`,{mid:"merchant1",payerId:user_details.player_id,amount:transactionAmount,currency:"BDT",redirectUrl:"https://www.babu88.com",orderId:orderId,callbackUrl:"https://admin.eassypay.com/bkash_api"});
+      const {data} = await axios.post(`${base_url2}/api/payment/bkash`,{mid:"merchant1",payerId:user_details.player_id,amount:transactionAmount,currency:"BDT",redirectUrl:"https://www.babu88.com",orderId:orderId,callbackUrl:"http://localhost:5173/callback-payment"});
       setProgress(70); // Update progress on successful request
       window.location.href = data.link;
       if (data.status === 200) {
         console.log("Deposit Success:", data.data);
+        console.log("ok")
       } else{
         Swal.fire({
           icon: "error",
@@ -300,9 +306,14 @@ const Header = () => {
       setLoading(false);
       setProgress(100); // Finalize progress
     }
+      }else{
+        setLoading(false);
+        setProgress(0);
+        toast.error("Something went wrong.This payment is not included!");
+      }
+
   };
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState(null);
     useEffect(() => {
       // Check the connection speed using the navigator.connection API
       if (navigator.connection) {

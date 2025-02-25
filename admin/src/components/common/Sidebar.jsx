@@ -24,19 +24,19 @@ const SIDEBAR_ITEMS = [
 	},
 	{ name: "Manage Users", icon: Users, color: "#EC4899", href: "/users",submenu: [
 		{ name: "Active Users", href: "/users/active-user" },
-		{ name: "Banned Users", href: "/games/slog" },
-		{ name: "Email Unverified", href: "/games/slog" },
-		{ name: "Mobile Unverified", href: "/games/slog" },
-		{ name: "With Balance", href: "/games/slog" },
-		{ name: "All Users", href: "/games/slog" },
-		{ name: "Send Notification", href: "/games/slog" },
+		{ name: "Banned Users", href: "/users/banned-user" },
+		// { name: "Email Unverified", href: "/games/slog" },
+		// { name: "Mobile Unverified", href: "/games/slog" },
+		// { name: "With Balance", href: "/games/slog" },
+		{ name: "All Users", href: "/users/all-user" },
+		{ name: "Send Notification", href: "/users/send-notification" },
 	],},
 	{ name: "Deposits", icon: DollarSign, color: "#10B981", href: "/deposits",submenu: [
 		{ name: "Pending Deposits", href: "/deposits/pending-deposit" },
-		{ name: "Approved Deposits", href: "/games/slog" },
+		// { name: "Approved Deposits", href: "/games/slog" },
 		{ name: "Successful Deposits", href: "/games/slog" },
-		{ name: "Mobile Unverified", href: "/games/slog" },
-		{ name: "Rejected Deposits", href: "/games/slog" },
+		// { name: "Mobile Unverified", href: "/games/slog" },
+		{ name: "Failed Deposits", href: "/games/slog" },
 		{ name: "All Deposits", href: "/games/slog" },
 	] },
 	{ name: "Withdrawal", icon: FaRegCreditCard, color: "#F59E0B", href: "/withdrwals" ,submenu: [
@@ -71,7 +71,7 @@ const Sidebar = () => {
 
 	return (
 		<motion.div
-			className={`relative z-10 transition-all duration-300 ease-in-out flex-shrink-0 ${
+			className={`relative z-10 transition-all font-bai duration-300 ease-in-out flex-shrink-0 ${
 				isSidebarOpen ? "w-64" : "w-20"
 			}`}
 			animate={{ width: isSidebarOpen ? 256 : 80 }}

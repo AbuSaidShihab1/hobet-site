@@ -61,7 +61,7 @@ const CurrencySelector = ({ selectedCurrency, setSelectedCurrency }) => {
 
 
 const AuthModal = ({ isOpen, onClose }) => {
-  const base_url="https://hobet-site.onrender.com";
+  const base_url="http://localhost:8080";
 
   const [activeTab, setActiveTab] = useState("signin");
   const navigate=useNavigate();

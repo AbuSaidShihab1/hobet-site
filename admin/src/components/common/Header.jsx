@@ -4,7 +4,7 @@ import { FiSearch, FiGlobe, FiBell, FiKey, FiChevronDown } from 'react-icons/fi'
 const Header = ({ title }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	return (
-		<header className='bg-[#071251] font-bai shadow-md border-b-[1px] border-gray-700 flex items-center justify-between px-4 py-[14px]'>
+		<header className='bg-[#071251] font-bai sticky top-0 left-0 z-[10000] shadow-md border-b-[1px] border-gray-700 flex items-center justify-between px-4 py-[14px]'>
 		{/* Search Bar */}
 		<div className='flex items-center bg-transparent border border-gray-500 rounded-md px-3 py-1 w-64'>
 		  <FiSearch className='text-white mr-2' />

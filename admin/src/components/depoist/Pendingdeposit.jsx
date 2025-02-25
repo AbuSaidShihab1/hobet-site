@@ -1,10 +1,12 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { FaCheck, FaEdit, FaHeart } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { FaSearch, FaRegCommentDots } from "react-icons/fa";
 import Header from '../common/Header';
+import moment from "moment"
+import axios from "axios"
 const Pendingdeposit = () => {
     const transactions = [
         {
@@ -105,15 +107,27 @@ const Pendingdeposit = () => {
           },
         // Add more transaction data here...
       ];
-      
+      const [pending_deposit,set_pending_deposit]=useState([]);
+      const pending_deposit_info=()=>{
+          axios.get(`http://localhost:8080/admin/pending-deposit`)
+          .then((res)=>{
+            set_pending_deposit(res.data.data)
+            console.log(res.data.data)
+          }).catch((err)=>{
+            console.log(err)
+          })
+      }
+      useEffect(()=>{
+        pending_deposit_info();
+      },[])
       const [searchTerm, setSearchTerm] = useState("");
     
   const [searchQuery, setSearchQuery] = useState('');
-  const filtrgames = transactions.filter((transaction) =>
-    transaction.gateway.toLowerCase().includes(searchQuery.toLowerCase())
+  const filter_deposit = pending_deposit.filter((transaction) =>
+    transaction.payment_method.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
-    <div className=" w-full font-bai">
+    <div className=" w-full font-bai overflow-y-auto">
       <Header/>
           <section className="p-4  ">
             <div className="p-6">
@@ -137,48 +151,51 @@ const Pendingdeposit = () => {
         <table className="w-full border-collapse bg-white rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-[#4634FF] text-white">
-              <th className="p-3">Gateway | Transaction</th>
-              <th className="p-3">Initiated</th>
-              <th className="p-3">User</th>
-              <th className="p-3">Amount</th>
-              <th className="p-3">Conversion</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Action</th>
+              <th className="p-3  text-left">Gateway</th>
+              <th className="p-3 text-left">Initiated</th>
+              <th className="p-3 text-left">User</th>
+              <th className="p-3 text-left">Amount</th>
+              {/* <th className="p-3">Conversion</th> */}
+              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Action</th>
             </tr>
           </thead>
           <tbody>
-            {filtrgames.map((transaction, index) => (
+            {filter_deposit.map((transaction, index) => (
               <tr key={index} className="border-b even:bg-gray-50">
                 <td className="p-3">
                   <span className="text-blue-600 font-semibold cursor-pointer hover:underline">
-                    {transaction.gateway}
+                    {transaction?.payment_method}
                   </span>
                   <div className="text-gray-500 text-sm">{transaction.transactionId}</div>
                 </td>
-                <td className="p-3 text-gray-700">{transaction.initiated}</td>
+                <td className="p-3 text-gray-700">{moment(transaction?.createdAt).format("MMMM Do YYYY, h:mm A")}</td>
                 <td className="p-3">
-                  <span className="font-semibold text-gray-700">{transaction.user}</span>
+                  <span className="font-semibold text-gray-700">{transaction?.email}</span>
                   <div className="text-blue-600 cursor-pointer hover:underline">
-                    {transaction.username}
+                    {transaction?.name}
                   </div>
                 </td>
                 <td className="p-3">
                   <div className="text-gray-700 ">{transaction.amount}</div>
                   <div className="font-semibold text-gray-800">{transaction.totalAmount}</div>
                 </td>
-                <td className="p-3">
+                {/* <td className="p-3">
                   <div className="text-gray-700">{transaction.conversion}</div>
                   <div className="font-semibold text-gray-700">{transaction.totalConversion}</div>
-                </td>
+                </td> */}
                 <td className="p-3">
                   <span className="bg-orange-100 text-orange-600 px-2 py-1 rounded-md text-sm">
                     {transaction.status}
                   </span>
                 </td>
                 <td className="p-3">
-                  <button className="flex items-center gap-1 border border-blue-600 text-blue-600 px-3 py-1 rounded-md hover:bg-blue-600 hover:text-white transition">
-                    <FaRegCommentDots /> Details
-                  </button>
+                  <NavLink to={`/deposits/pending-deposit-details/${transaction._id}`}>
+                      <button className="flex items-center gap-1 border border-blue-600 text-blue-600 px-3 py-1 rounded-md hover:bg-blue-600 hover:text-white transition">
+                         <FaRegCommentDots /> Details
+                       </button>
+                  </NavLink>
+            
                 </td>
               </tr>
             ))}
